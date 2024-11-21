@@ -1,5 +1,7 @@
 from django.db import models
 import datetime
+from datetime import timedelta
+from django.utils import timezone
 # Create your models here.
 
 # category,customer,product,order
@@ -33,9 +35,17 @@ class Product(models.Model):
     Category=models.ForeignKey(Category,on_delete=models.CASCADE,default=1)
     description=models.CharField(max_length=250,default='',blank=True,null=True)
     image=models.ImageField(upload_to='uploads/product/')
-    
+    # add sale stuff
+    is_sale=models.BooleanField(default=False)
+    sale_price=models.DecimalField(default=0,decimal_places=2,max_digits=6)
+    created_at = models.DateField(default=timezone.now)  # Using timezone.now() here
     def __str__(self):
         return self.name
+    
+    @property
+    def is_new(self):
+        # Consider a product "new" if it was added within the last 7 days
+        return timezone.now().date() - self.created_at <= timedelta(days=7)
     
 class Order(models.Model):
     Product=models.ForeignKey(Product,on_delete=models.CASCADE)
