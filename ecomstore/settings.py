@@ -110,6 +110,7 @@ STATIC_URL = 'static/'
 # during template addition below one line code is added
 STATICFILES_DIRS=['static/']
 
+
 MEDIA_URL ='media/'
 MEDIA_ROOT= os.path.join(BASE_DIR,'media')
 

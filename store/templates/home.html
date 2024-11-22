@@ -3,18 +3,18 @@
 
 {% block content %}
     <!-- Hero Section -->
-    <div class="bg-gray-900 h-96 text-white">
+    <div class="bg-gray-100 h-96 text-black-800">
         <div class="container mx-auto px-6 py-16">
             <div class="flex flex-col md:flex-row items-center">
                 <div class="md:w-1/2">
-                    <h1 class="text-4xl font-bold mb-4">Winter Sale is Live!</h1>
-                    <p class="mb-6">Get up to 50% off on selected items. Limited time offer.</p>
-                    <button class="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100">
+                    <h1 class="text-6xl font-bold mb-4">Winter Sale is Live!</h1>
+                    <p class="mb-6 text-blue-800">Get up to 50% off on selected items. Limited time offer.</p>
+                    <button class="bg-gray-800 text-gray-200 px-6 py-3 rounded-lg font-semibold hover:bg-gray-900">
                         Shop Now
                     </button>
                 </div>
-                <div class="md:w-1/2 mt-8 md:mt-0">
-                    <img src="{% static '/assests/36.jpg' %}" alt="Hero Image" class="rounded-lg shadow-xl">
+                <div class="md:w-[40%] mt-8 md:mt-0  mx-auto px-6 py-16">
+                    <img src="{% static 'assests/36.jpg' %}" alt="Hero Image" class="rounded-lg shadow-xl ">
                 </div>
                 
             </div>
@@ -22,7 +22,7 @@
     </div>
 
     <!-- Categories Section -->
-    <div class="bg-gray-100 py-8">
+    <div class="bg-gray-100 py-14">
         <div class="container mx-auto px-6">
             <h2 class="text-2xl font-bold mb-8">Shop by Category</h2>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
