@@ -1,3 +1,4 @@
+from itertools import product
 from django.shortcuts import render,redirect
 from .models import Product
 from django.contrib.auth import authenticate,login,logout
@@ -9,6 +10,11 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .forms import SignUpForm
 from django import forms
+
+
+def product_page(request,pk):
+    Product=Product.objects.get(id=pk)
+    return render(request ,'product.html',{'product':product})
 
 # Create your views here.
 def home(request):
