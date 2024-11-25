@@ -13,7 +13,7 @@ from django import forms
 
 
 def product_page(request,pk):
-    Product=Product.objects.get(id=pk)
+    products=Product.objects.get(id=pk)
     return render(request ,'product.html',{'product':product})
 
 # Create your views here.
