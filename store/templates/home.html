@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<section id="home" class="relative bg-white text-gray-800 py-14 overflow-hidden">
+    <div class="absolute inset-0 bg-pattern opacity-10"></div>
+    <div class="container mx-auto px-4 py-20 relative z-10 flex flex-col md:flex-row items-center justify-between">
+        <div class="md:w-1/2 text-center md:text-left mb-10 md:mb-0 space-y-6">
+            <div class="inline-block bg-gray-100 px-4 py-2 rounded-full text-sm tracking-wide">
+                New Season, New Style
+            </div>
+            <h2 class="text-5xl font-extrabold mb-4 leading-tight">
+                Elevate Your <br/>
+                <span class="text-blue-800">Everyday Trend</span>
+            </h2>
+            <p class="text-xl mb-6 text-gray-600">
+                Get ready to stay cozy and stylish.
+                Get ready to stay cozy and stylish.
+                Get ready to stay cozy and stylish.
+                Get ready to stay cozy and stylish.
+            </p>
+            <div class="flex space-x-4 justify-center md:justify-start">
+                <a href="#products" class="bg-blue-800 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition font-semibold shadow-lg">
+                    Shop Now
+                </a>
+                <a href="#" class="bg-transparent border-2 border-brand-blue text-brand-blue px-8 py-3 rounded-lg hover:bg-blue-50 transition font-semibold">
+                    Learn More
+                </a>
+            </div>
+            <div class="mt-8 flex items-center justify-center md:justify-start space-x-4 text-sm">
+                <div class="flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-300 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                    <span>5000+ Happy Customers</span>
+                </div>
+                <div class="flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                    </svg>
+                    <span>100% Authentic Products</span>
+                </div>
+            </div>
+        </div>
+        <div class="md:w-1/2 flex justify-center">
+            <div class="relative">
+                <div class="absolute -inset-4 bg-gray-100 rounded-3xl transform -rotate-6"></div>
+                <img src="{% static 'assests/banner.jpg' %}" alt="Winter Clothing" class="relative z-10 rounded-3xl shadow-2xl transform hover:scale-105 transition-transform duration-300">
+            </div>
+            
+        </div>  
+    </div>
+    <style>
+        .bg-pattern {
+            background-image: 
+                linear-gradient(to right, rgba(0,0,0,0.1) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0,0,0,0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+    </style>
+</section>
+
+    <!-- Categories Section -->
+<section id="categories" class="relative bg-white text-gray-800 py-14 overflow-hidden">
+    <!-- <div class="absolute inset-0 bg-pattern opacity-10"></div> -->
+    <div class="container mx-auto px-6 lg:px-16">
+        <!-- Section Heading -->
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-extrabold text-gray-800 sm:text-4xl">
+                Shop by Category
+            </h2>
+            <p class="mt-2 text-lg text-gray-600">
+                Explore a wide range of categories tailored to your needs.
+            </p>
+        </div>
+        <!-- Categories Grid -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <!-- Category Card -->
+            <a href="{% url 'category' 'mens' %}" class="block">
+                <div class="bg-white p-8 rounded-lg shadow hover:shadow-lg transition-shadow cursor-pointer text-center">
+                    <i class="fas fa-vest text-4xl text-blue-500 mb-4"></i>
+                    <h3 class="font-semibold text-gray-800">Men's</h3>
+                </div>
+            </a>
+            <!-- Category Card -->
+            <div class="bg-white p-8 rounded-lg shadow hover:shadow-lg transition-shadow cursor-pointer text-center">
+                <i class="fas fa-tshirt text-4xl text-blue-500 mb-4"></i>
+                <h3 class="font-semibold text-gray-800">Women's</h3>
+            </div>
+            <!-- Category Card -->
+            <div class="bg-white p-8 rounded-lg shadow hover:shadow-lg transition-shadow cursor-pointer text-center">
+                <i class="fas fa-male text-4xl text-blue-500 mb-4"></i>
+                <h3 class="font-semibold text-gray-800">Baby</h3>
+            </div>
+            <!-- Category Card -->
+            <div class="bg-white p-8 rounded-lg shadow hover:shadow-lg transition-shadow cursor-pointer text-center">
+                <i class="fas fa-female text-4xl text-blue-500 mb-4"></i>
+                <h3 class="font-semibold text-gray-800">Shoes</h3>
+            </div>
+
+            <!-- <div class="bg-white p-8 rounded-lg shadow hover:shadow-lg transition-shadow cursor-pointer text-center">
+                <i class="fas fa-female text-4xl text-blue-500 mb-4"></i>
+                <h3 class="font-semibold text-gray-800">Sports</h3>
+            </div> -->
+        </div>
+    </div>
+</section>
+
+    <!-- Featured Products Section -->
+<section id="products" class="relative bg-white text-gray-800 py-14 overflow-hidden">
+    <div class="absolute inset-0 bg-pattern opacity-10"></div>
+    <div class="container mx-auto px-6 lg:px-16">
+        <!-- Section Heading -->
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-extrabold text-gray-800 sm:text-4xl">
+                Featured Products
+            </h2>
+            <p class="mt-2 text-lg text-gray-600">
+                Browse through our curated selection of top picks just for you.
+            </p>
+        </div>
+
+        
+        <div class="grid md:grid-cols-4 gap-6" id="featuredProducts">
+            {% for product in products %}
+                <div class="bg-white p-4 rounded-lg shadow-md product-hover relative">
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-40 object-cover mb-4 rounded">
+                    {% if product.is_new %}
+                        <span class="absolute top-3 left-3 bg-green-500 text-white text-xs px-2 py-1 rounded">New</span>
+                    {% endif %}
+                    {% if product.is_sale %}
+                    <span class="absolute top-3 left-3 bg-green-500 text-white text-xs px-2 py-1 rounded">Sale</span>
+                {% endif %}
+                    <h3 class="font-bold text-l mb-2">{{ product.name }}</h3>
+                    <p class="text-gray-800 mb-4">{{ product.Category }}</p>
+                    <p class="text-gray-800 mb-4">$ {{ product.price }}</p>
+                    
+                    <!-- Buttons -->
+                    <div class="flex justify-between items-center">
+                        <!-- Add to Cart -->
+                        <button 
+                            class="text-gray-900 px-4 py-2 rounded hover:text-blue-600 flex items-center gap-2"
+                            onclick="addToCart('{{ product.id }}')"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m-.4 0L3 3m4 10l.4 2m.6 6a2 2 0 100-4 2 2 0 000 4zm10 0a2 2 0 100-4 2 2 0 000 4z" />
+                            </svg>
+                        </button>
+
+                        <!-- View Product -->
+                        <a 
+                            href="/product/{{ product.id }}" 
+                            class="bg-gray-100 text-gray-700 px-4 py-2 rounded hover:bg-gray-200 flex items-center gap-2"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276a1 1 0 00-.553-1.894L9 7m0 0l6 6M9 7H5a2 2 0 00-2 2v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-4m-5-1v4m0 0H9" />
+                            </svg>
+                            View
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <style>
+            .bg-pattern {
+                background-image: 
+                    linear-gradient(to right, rgba(0,0,0,0.1) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(0,0,0,0.1) 1px, transparent 1px);
+                background-size: 30px 30px;
+            }
+        </style>
+    </section>
+{% endblock %}

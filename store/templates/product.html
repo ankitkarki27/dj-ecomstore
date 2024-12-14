@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container bg-white mx-auto mt-14 flex items-center justify-center min-h-screen">
+    <div class="absolute inset-0 bg-pattern opacity-10"></div>
+    <div class="flex flex-wrap lg:flex-nowrap gap-8 p-4">
+        <!-- Product Image -->
+        <div class="w-full lg:w-1/3">
+            <img 
+                src="{{ product.image.url }}" 
+                alt="{{ product.name }}" 
+                class="w-full rounded-lg shadow-md"
+            >
+            <!-- {% if product.is_sale %}
+            <span class="absolute top-3 left-3 bg-green-500 text-white text-xs px-2 py-1 rounded">Sale</span>
+        {% endif %} -->
+
+        <!-- sale code still need to be add -->
+        </div>
+
+        <!-- Product Details -->
+        <div class="w-full lg:w-1/2">
+           
+            <h1 class="text-2xl font-bold text-gray-800">{{ product.name }}</h1>
+            <p class="text-gray-600 text-lg mt-2">{{ product.description }}</p>
+            <h4 class="text-green-500 text-xl font-semibold mt-4">Price: ${{ product.price }}</h4>
+
+            <div class="mt-6">
+                <button 
+                    class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg shadow"
+                >
+                    Add to Cart
+                </button>
+                <button 
+                    class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-6 py-2 rounded-lg ml-4 shadow"
+                >
+                    Buy Now
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <style>
+        .bg-pattern {
+            background-image: 
+                linear-gradient(to right, rgba(0,0,0,0.1) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0,0,0,0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+    </style>
+</div>
+
+{% endblock %}
