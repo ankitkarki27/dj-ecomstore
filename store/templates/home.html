@@ -4,26 +4,27 @@
 {% block content %}
 <section id="home" class="relative bg-white text-gray-800 py-14 overflow-hidden">
     <div class="absolute inset-0 bg-pattern opacity-10"></div>
-    <div class="container mx-auto px-4 py-20 relative z-10 flex flex-col md:flex-row items-center justify-between">
+    <div class="container mx-auto px-4 py-20 relative z-10 flex flex-col md:flex-row items-center justify-between space-y-10 md:space-y-0">
+        <!-- Text Section -->
         <div class="md:w-1/2 text-center md:text-left mb-10 md:mb-0 space-y-6">
             <div class="inline-block bg-gray-100 px-4 py-2 rounded-full text-sm tracking-wide">
                 New Season, New Style
             </div>
             <h2 class="text-5xl font-extrabold mb-4 leading-tight">
-                Elevate Your <br/>
+                Elevate Your <br />
                 <span class="text-blue-800">Everyday Trend</span>
             </h2>
-            <p class="text-xl mb-2 text-gray-600">
-                Get ready to stay cozy and stylish.
-                Get ready to stay cozy and stylish.
-                Get ready to stay cozy and stylish.
-                Get ready to stay cozy and stylish.
+            <p class="text-l mb-6 text-gray-600 text-justify">
+                Get ready to stay cozy and stylish. Discover the perfect blend of 
+                comfort and elegance that matches your everyday trend. 
+                Transform your wardrobe with timeless designs and 
+                modern fashion statements.
             </p>
             <div class="flex space-x-4 justify-center md:justify-start">
                 <a href="#products" class="bg-blue-800 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition font-semibold shadow-lg">
                     Shop Now
                 </a>
-                <a href="#" class="bg-transparent border-2 border-brand-blue text-brand-blue px-8 py-3 rounded-lg hover:bg-blue-50 transition font-semibold">
+                <a href="#" class="bg-transparent border-2 border-blue-800 text-blue-800 px-8 py-3 rounded-lg hover:bg-blue-50 transition font-semibold">
                     Learn More
                 </a>
             </div>
@@ -42,13 +43,13 @@
                 </div>
             </div>
         </div>
+        <!-- Image Section -->
         <div class="md:w-1/2 flex justify-center">
             <div class="relative">
-                <div class="absolute -inset-4 bg-gray-100 rounded-3xl transform -rotate-6"></div>
+                <div class="absolute inset-2 bg-gray-100 rounded-3xl transform -rotate-6"></div>
                 <img src="{% static 'assests/banner.jpg' %}" alt="Winter Clothing" class="relative z-10 rounded-3xl shadow-2xl transform hover:scale-105 transition-transform duration-300">
             </div>
-            
-        </div>  
+        </div>
     </div>
     <style>
         .bg-pattern {
@@ -59,6 +60,7 @@
         }
     </style>
 </section>
+
 
     <!-- Categories Section -->
 <section id="categories" class="relative bg-white text-gray-800 py-14 overflow-hidden">
@@ -134,7 +136,7 @@
                     <span class="absolute top-3 left-3 bg-green-500 text-white text-xs px-2 py-1 rounded">Sale</span>
                 {% endif %}
                     <h3 class="font-bold text-l mb-2">{{ product.name }}</h3>
-                    <p class="text-gray-800 mb-4">{{ product.Category }}</p>
+                    <!-- <p class="text-gray-800 mb-4">{{ product.Category }}</p> -->
                     <p class="text-gray-800 mb-4">$ {{ product.price }}</p>
                     
                     <!-- Buttons -->
@@ -142,7 +144,7 @@
                         <!-- Add to Cart -->
                         <button 
                             class="text-gray-900 px-4 py-2 rounded hover:text-blue-600 flex items-center gap-2"
-                            onclick="addToCart('{{ product.id }}')"
+                             onclick="addToCart('{{ product.id }}')"
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m-.4 0L3 3m4 10l.4 2m.6 6a2 2 0 100-4 2 2 0 000 4zm10 0a2 2 0 100-4 2 2 0 000 4z" />
@@ -172,5 +174,6 @@
             }
         </style>
     </section>
+    
     
 {% endblock %}
