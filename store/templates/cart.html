@@ -1,3 +1,7 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
 <!-- Cart Page -->
 <section id="cart" class="relative bg-white text-gray-800 py-14 overflow-hidden">
     <div class="absolute inset-0 bg-pattern opacity-10"></div>
@@ -21,77 +25,12 @@
                         <th class="py-3 px-6 text-center font-medium text-gray-600">Action</th>
                     </tr>
                 </thead>
-                <tbody id="cartItems">
-                    {% if cart_items %}
-                        {% for item in cart_items %}
-                            <tr class="border-b border-gray-200">
-                                <!-- Product -->
-                                <td class="py-4 px-6 text-left flex items-center gap-4">
-                                    <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="w-16 h-16 object-cover rounded">
-                                    <span>{{ item.product.name }}</span>
-                                </td>
-                                <!-- Quantity -->
-                                <td class="py-4 px-6 text-center">
-                                    <input 
-                                        type="number" 
-                                        class="w-16 text-center border border-gray-300 rounded-md" 
-                                        min="1" 
-                                        value="{{ item.quantity }}" 
-                                        onchange="updateQuantity('{{ item.product.id }}', this.value)"
-                                    >
-                                </td>
-                                <!-- Price -->
-                                <td class="py-4 px-6 text-center">
-                                    ${{ item.product.price }}
-                                </td>
-                                <!-- Total -->
-                                <td class="py-4 px-6 text-center">
-                                    ${{ item.quantity * item.product.price }}
-                                </td>
-                                <!-- Remove -->
-                                <td class="py-4 px-6 text-center">
-                                    <button 
-                                        class="text-red-600 hover:text-red-800"
-                                        onclick="removeFromCart('{{ item.product.id }}')"
-                                    >
-                                        Remove
-                                    </button>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    {% else %}
-                        <tr>
-                            <td colspan="5" class="text-center py-6 text-gray-600">Your cart is empty.</td>
-                        </tr>
-                    {% endif %}
-                </tbody>
+
             </table>
         </div>
 
         <!-- Cart Summary -->
-        <div class="mt-8 flex justify-end">
-            <div class="bg-gray-100 p-6 rounded-lg w-full max-w-md">
-                <h3 class="font-bold text-lg mb-4">Cart Summary</h3>
-                <div class="flex justify-between text-gray-600 mb-2">
-                    <span>Subtotal:</span>
-                    <span>${{ cart_total }}</span>
-                </div>
-                <div class="flex justify-between text-gray-600 mb-4">
-                    <span>Tax (10%):</span>
-                    <span>${{ cart_total * 0.1 }}</span>
-                </div>
-                <div class="flex justify-between text-gray-800 font-bold text-lg">
-                    <span>Total:</span>
-                    <span>${{ cart_total * 1.1 }}</span>
-                </div>
-                <button 
-                    class="w-full bg-blue-600 text-white py-2 mt-4 rounded-lg hover:bg-blue-700" 
-                    onclick="proceedToCheckout()"
-                >
-                    Proceed to Checkout
-                </button>
-            </div>
-        </div>
+      
 
         <style>
             .bg-pattern {
@@ -120,3 +59,4 @@
         console.log('Proceed to checkout');
     }
 </script>
+{% endblock %}

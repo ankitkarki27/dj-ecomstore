@@ -1,0 +1,122 @@
+<!-- Cart Page -->
+<section id="cart" class="relative bg-white text-gray-800 py-14 overflow-hidden">
+    <div class="absolute inset-0 bg-pattern opacity-10"></div>
+    <div class="container mx-auto px-6 lg:px-16">
+        <!-- Section Heading -->
+        <div class="text-left mb-12">
+            <h2 class="text-xl font-bold text-gray-800 sm:text-4xl">
+                Your Cart
+            </h2>
+        </div>
+
+        <!-- Cart Table -->
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white border border-gray-200 rounded-lg">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="py-3 px-6 text-left font-medium text-gray-600">Product</th>
+                        <th class="py-3 px-6 text-center font-medium text-gray-600">Quantity</th>
+                        <th class="py-3 px-6 text-center font-medium text-gray-600">Price</th>
+                        <th class="py-3 px-6 text-center font-medium text-gray-600">Total</th>
+                        <th class="py-3 px-6 text-center font-medium text-gray-600">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="cartItems">
+                    {% if cart_items %}
+                        {% for item in cart_items %}
+                            <tr class="border-b border-gray-200">
+                                <!-- Product -->
+                                <td class="py-4 px-6 text-left flex items-center gap-4">
+                                    <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="w-16 h-16 object-cover rounded">
+                                    <span>{{ item.product.name }}</span>
+                                </td>
+                                <!-- Quantity -->
+                                <td class="py-4 px-6 text-center">
+                                    <input 
+                                        type="number" 
+                                        class="w-16 text-center border border-gray-300 rounded-md" 
+                                        min="1" 
+                                        value="{{ item.quantity }}" 
+                                        onchange="updateQuantity('{{ item.product.id }}', this.value)"
+                                    >
+                                </td>
+                                <!-- Price -->
+                                <td class="py-4 px-6 text-center">
+                                    ${{ item.product.price }}
+                                </td>
+                                <!-- Total -->
+                                <td class="py-4 px-6 text-center">
+                                    ${{ item.quantity * item.product.price }}
+                                </td>
+                                <!-- Remove -->
+                                <td class="py-4 px-6 text-center">
+                                    <button 
+                                        class="text-red-600 hover:text-red-800"
+                                        onclick="removeFromCart('{{ item.product.id }}')"
+                                    >
+                                        Remove
+                                    </button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="5" class="text-center py-6 text-gray-600">Your cart is empty.</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Cart Summary -->
+        <div class="mt-8 flex justify-end">
+            <div class="bg-gray-100 p-6 rounded-lg w-full max-w-md">
+                <h3 class="font-bold text-lg mb-4">Cart Summary</h3>
+                <div class="flex justify-between text-gray-600 mb-2">
+                    <span>Subtotal:</span>
+                    <span>${{ cart_total }}</span>
+                </div>
+                <div class="flex justify-between text-gray-600 mb-4">
+                    <span>Tax (10%):</span>
+                    <span>${{ cart_total * 0.1 }}</span>
+                </div>
+                <div class="flex justify-between text-gray-800 font-bold text-lg">
+                    <span>Total:</span>
+                    <span>${{ cart_total * 1.1 }}</span>
+                </div>
+                <button 
+                    class="w-full bg-blue-600 text-white py-2 mt-4 rounded-lg hover:bg-blue-700" 
+                    onclick="proceedToCheckout()"
+                >
+                    Proceed to Checkout
+                </button>
+            </div>
+        </div>
+
+        <style>
+            .bg-pattern {
+                background-image: 
+                    linear-gradient(to right, rgba(0,0,0,0.1) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(0,0,0,0.1) 1px, transparent 1px);
+                background-size: 30px 30px;
+            }
+        </style>
+    </div>
+</section>
+
+<script>
+    function updateQuantity(productId, quantity) {
+        // Add your logic to update the quantity of the product in the cart
+        console.log(`Update product ${productId} to quantity ${quantity}`);
+    }
+
+    function removeFromCart(productId) {
+        // Add your logic to remove the product from the cart
+        console.log(`Remove product ${productId} from cart`);
+    }
+
+    function proceedToCheckout() {
+        // Add your logic to proceed to checkout
+        console.log('Proceed to checkout');
+    }
+</script>
