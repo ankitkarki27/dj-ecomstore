@@ -37,7 +37,7 @@ def category_page(request, foo):
         category = get_object_or_404(Category, name__iexact=category_name)
 
         # Get all products that belong to the fetched category
-        products = Product.objects.filter(category=category)
+        products = Product.objects.filter(Category=category)
 
         # Render the category page template and pass the products and category details
         return render(request, 'category.html', {
@@ -50,6 +50,7 @@ def category_page(request, foo):
         # If the category does not exist, show an error message
         messages.error(request, "The category you are looking for does not exist.")
         return redirect('home')  # Redirect to the home page
+
 
     
 def product_page(request,pk):

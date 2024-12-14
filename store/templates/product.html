@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="container bg-white mx-auto mt-14 flex items-center justify-center min-h-screen">
+<div class="relative bg-white mx-auto mt-14 flex items-center justify-center min-h-screen">
     <div class="absolute inset-0 bg-pattern opacity-10"></div>
     <div class="flex flex-wrap lg:flex-nowrap gap-8 p-4">
         <!-- Product Image -->
@@ -23,6 +23,7 @@
            
             <h1 class="text-2xl font-bold text-gray-800">{{ product.name }}</h1>
             <p class="text-gray-600 text-lg mt-2">{{ product.description }}</p>
+            <p class="text-gray-600 text-lg mt-2">{{ product.Category }}</p>
             <h4 class="text-green-500 text-xl font-semibold mt-4">Price: ${{ product.price }}</h4>
 
             <div class="mt-6">

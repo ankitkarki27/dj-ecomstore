@@ -13,7 +13,7 @@
                 Elevate Your <br/>
                 <span class="text-blue-800">Everyday Trend</span>
             </h2>
-            <p class="text-xl mb-6 text-gray-600">
+            <p class="text-xl mb-2 text-gray-600">
                 Get ready to stay cozy and stylish.
                 Get ready to stay cozy and stylish.
                 Get ready to stay cozy and stylish.
@@ -65,38 +65,42 @@
     <!-- <div class="absolute inset-0 bg-pattern opacity-10"></div> -->
     <div class="container mx-auto px-6 lg:px-16">
         <!-- Section Heading -->
-        <div class="text-center mb-12">
-            <h2 class="text-3xl font-extrabold text-gray-800 sm:text-4xl">
+        <div class="text-left mb-12">
+            <h2 class="text-xl font-bold text-gray-800 sm:text-4xl">
                 Shop by Category
             </h2>
-            <p class="mt-2 text-lg text-gray-600">
-                Explore a wide range of categories tailored to your needs.
-            </p>
+            
         </div>
         <!-- Categories Grid -->
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
             <!-- Category Card -->
-            <a href="{% url 'category' 'mens' %}" class="block">
+            <a href="{% url 'category' 'men' %}" class="block">
                 <div class="bg-white p-8 rounded-lg shadow hover:shadow-lg transition-shadow cursor-pointer text-center">
                     <i class="fas fa-vest text-4xl text-blue-500 mb-4"></i>
-                    <h3 class="font-semibold text-gray-800">Men's</h3>
+                    <h3 class="font-semibold text-gray-800">Men</h3>
                 </div>
             </a>
             <!-- Category Card -->
+            <a href="{% url 'category' 'women' %}" class="block">
             <div class="bg-white p-8 rounded-lg shadow hover:shadow-lg transition-shadow cursor-pointer text-center">
                 <i class="fas fa-tshirt text-4xl text-blue-500 mb-4"></i>
-                <h3 class="font-semibold text-gray-800">Women's</h3>
+                <h3 class="font-semibold text-gray-800">Women</h3>
             </div>
+            </a>
             <!-- Category Card -->
+            <a href="{% url 'category' 'baby' %}" class="block">
             <div class="bg-white p-8 rounded-lg shadow hover:shadow-lg transition-shadow cursor-pointer text-center">
                 <i class="fas fa-male text-4xl text-blue-500 mb-4"></i>
                 <h3 class="font-semibold text-gray-800">Baby</h3>
             </div>
+            </a>
             <!-- Category Card -->
+            <a href="{% url 'category' 'shoes' %}" class="block">
             <div class="bg-white p-8 rounded-lg shadow hover:shadow-lg transition-shadow cursor-pointer text-center">
                 <i class="fas fa-female text-4xl text-blue-500 mb-4"></i>
                 <h3 class="font-semibold text-gray-800">Shoes</h3>
             </div>
+            </a>
 
             <!-- <div class="bg-white p-8 rounded-lg shadow hover:shadow-lg transition-shadow cursor-pointer text-center">
                 <i class="fas fa-female text-4xl text-blue-500 mb-4"></i>
@@ -111,13 +115,11 @@
     <div class="absolute inset-0 bg-pattern opacity-10"></div>
     <div class="container mx-auto px-6 lg:px-16">
         <!-- Section Heading -->
-        <div class="text-center mb-12">
-            <h2 class="text-3xl font-extrabold text-gray-800 sm:text-4xl">
-                Featured Products
+        <div class="text-left mb-12">
+            <h2 class="text-xl font-bold text-gray-800 sm:text-4xl">
+                New Products
             </h2>
-            <p class="mt-2 text-lg text-gray-600">
-                Browse through our curated selection of top picks just for you.
-            </p>
+            
         </div>
 
         
@@ -170,4 +172,5 @@
             }
         </style>
     </section>
+    
 {% endblock %}

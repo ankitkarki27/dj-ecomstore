@@ -2,90 +2,89 @@
 {% load static %}
 
 {% block content %}
-    <!-- Hero Section -->
-    <section id="hero" class="bg-white h-100 text-gray-200">
-        <div class="container mx-auto px-6 py-12">
-            <div class="flex flex-col md:flex-row items-center">
-                <div class="md:w-1/2">
-                    <h1 class="text-6xl font-bold mb-4 ">Winter is Live!</h1>
-                    <p class="mb-6 text-l text-gray-100">Get up to 50% off on selected items. Limited time offer.</p>
-                    <button class="bg-gray-800 text-gray-200 px-6 py-3 rounded-lg font-semibold hover:bg-gray-900">
-                        Shop Now
-                    </button>
-                </div>
-                <div class="md:w-[42%] mx-auto px-1 py-14">
-                    <img src="{% static 'assests/2.jpg' %}" alt="Hero Image" class="w-full rounded-lg shadow-2xl">
-                </div>
-            </div>
-        </div>
-    </section>
-    
     <!-- Categories Section -->
-    <section id="categories" class="bg-gray-100 py-14">
-        <div class="container mx-auto px-16">
-            <h2 class="text-2xl font-bold mb-8">Shop by Category</h2>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div class="bg-white p-6 rounded-lg shadow-md text-center cursor-pointer hover:shadow-lg transition-shadow">
-                    <i class="fas fa-vest text-4xl text-blue-600 mb-4"></i>
-                    <h3 class="font-semibold">Winter Clothes</h3>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-md text-center cursor-pointer hover:shadow-lg transition-shadow">
-                    <i class="fas fa-tshirt text-4xl text-blue-600 mb-4"></i>
-                    <h3 class="font-semibold">Summer Clothes</h3>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-md text-center cursor-pointer hover:shadow-lg transition-shadow">
-                    <i class="fas fa-user text-4xl text-blue-600 mb-4"></i>
-                    <h3 class="font-semibold">Men's</h3>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-md text-center cursor-pointer hover:shadow-lg transition-shadow">
-                    <i class="fas fa-user text-4xl text-blue-600 mb-4"></i>
-                    <h3 class="font-semibold">Women's</h3>
-                </div>
+    <section id="categories" class="relative bg-white text-gray-800 py-32"> <!-- Increased top spacing -->
+        <div class="container mx-auto px-8 lg:px-16">
+            <!-- Section Heading -->
+            <div class="text-left mb-8">
+                <h2 class="text-l font-bold text-gray-800 sm:text-4xl uppercase">Shop by Category</h2>
+            </div>
+            <!-- Categories Grid -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <!-- Men Category -->
+                <a href="{% url 'category' 'men' %}" class="block">
+                    <div class="bg-white p-8 rounded-lg shadow hover:shadow-lg transition-shadow text-center">
+                        <i class="fas fa-vest text-4xl text-blue-500 mb-4"></i>
+                        <h3 class="font-semibold text-gray-800">Men</h3>
+                    </div>
+                </a>
+                <!-- Women Category -->
+                <a href="{% url 'category' 'women' %}" class="block">
+                    <div class="bg-white p-8 rounded-lg shadow hover:shadow-lg transition-shadow text-center">
+                        <i class="fas fa-tshirt text-4xl text-blue-500 mb-4"></i>
+                        <h3 class="font-semibold text-gray-800">Women</h3>
+                    </div>
+                </a>
+                <!-- Baby Category -->
+                <a href="{% url 'category' 'baby' %}" class="block">
+                    <div class="bg-white p-8 rounded-lg shadow hover:shadow-lg transition-shadow text-center">
+                        <i class="fas fa-male text-4xl text-blue-500 mb-4"></i>
+                        <h3 class="font-semibold text-gray-800">Baby</h3>
+                    </div>
+                </a>
+                <!-- Shoes Category -->
+                <a href="{% url 'category' 'shoes' %}" class="block">
+                    <div class="bg-white p-8 rounded-lg shadow hover:shadow-lg transition-shadow text-center">
+                        <i class="fas fa-female text-4xl text-blue-500 mb-4"></i>
+                        <h3 class="font-semibold text-gray-800">Shoes</h3>
+                    </div>
+                </a>
             </div>
         </div>
     </section>
 
     <!-- Featured Products Section -->
-    <section id="products" class="container bg-gray-100 mx-auto px-4 py-16">
-        <h2 class="text-3xl font-bold text-center mb-12">Featured Products</h2>
-        <div class="grid md:grid-cols-4 gap-6" id="featuredProducts">
-            {% for product in products %}
-                <div class="bg-white p-4 rounded-lg shadow-md product-hover relative">
-                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-40 object-cover mb-4 rounded">
-                    {% if product.is_new %}
-                        <span class="absolute top-3 left-3 bg-green-500 text-white text-xs px-2 py-1 rounded">New</span>
-                    {% endif %}
-                    {% if product.is_sale %}
-                    <span class="absolute top-3 left-3 bg-green-500 text-white text-xs px-2 py-1 rounded">Sale</span>
-                {% endif %}
-                    <h3 class="font-bold text-lg mb-2">{{ product.name }}</h3>
-                    <p class="text-gray-500 mb-4">Rs {{ product.price }}</p>
-                    
-                    <!-- Buttons -->
-                    <div class="flex justify-between items-center">
-                        <!-- Add to Cart -->
-                        <button 
-                            class="text-gray-900 px-4 py-2 rounded hover:text-blue-600 flex items-center gap-2"
-                            onclick="addToCart('{{ product.id }}')"
-                        >
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m-.4 0L3 3m4 10l.4 2m.6 6a2 2 0 100-4 2 2 0 000 4zm10 0a2 2 0 100-4 2 2 0 000 4z" />
-                            </svg>
-                        </button>
-
-                        <!-- View Product -->
-                        <a 
-                            href="/product/{{ product.id }}" 
-                            class="bg-gray-100 text-gray-700 px-4 py-2 rounded hover:bg-gray-200 flex items-center gap-2"
-                        >
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276a1 1 0 00-.553-1.894L9 7m0 0l6 6M9 7H5a2 2 0 00-2 2v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-4m-5-1v4m0 0H9" />
-                            </svg>
-                            View
-                        </a>
+    <section id="products" class="relative bg-white text-gray-800 py-10">
+        <div class="container mx-auto px-8 lg:px-16">
+            <!-- Section Heading -->
+            <div class="text-left mb-12">
+                <h2 class="text-xl font-bold text-gray-800 sm:text-4xl">Featured Products</h2>
+            </div>
+            <!-- Products Grid -->
+            <div class="grid md:grid-cols-4 gap-6" id="featuredProducts">
+                {% for product in products %}
+                    <div class="bg-white p-4 rounded-lg shadow-md product-hover relative">
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-40 object-cover mb-4 rounded">
+                        {% if product.is_new %}
+                            <span class="absolute top-3 left-3 bg-green-500 text-white text-xs px-2 py-1 rounded">New</span>
+                        {% endif %}
+                        {% if product.is_sale %}
+                            <span class="absolute top-3 left-3 bg-red-500 text-white text-xs px-2 py-1 rounded">Sale</span>
+                        {% endif %}
+                        <h3 class="font-bold text-l mb-2">{{ product.name }}</h3>
+                        <p class="text-gray-800 mb-4">{{ product.Category }}</p>
+                        <p class="text-gray-800 mb-4">$ {{ product.price }}</p>
+                        <!-- Buttons -->
+                        <div class="flex justify-between items-center">
+                            <button 
+                                class="text-gray-900 px-4 py-2 rounded hover:text-blue-600 flex items-center gap-2"
+                                onclick="addToCart('{{ product.id }}')">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m-.4 0L3 3m4 10l.4 2m.6 6a2 2 0 100-4 2 2 0 000 4zm10 0a2 2 0 100-4 2 2 0 000 4z" />
+                                </svg>
+                            </button>
+                            <a 
+                                href="/product/{{ product.id }}" 
+                                class="bg-gray-100 text-gray-700 px-4 py-2 rounded hover:bg-gray-200 flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276a1 1 0 00-.553-1.894L9 7m0 0l6 6M9 7H5a2 2 0 00-2 2v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-4m-5-1v4m0 0H9" />
+                                </svg>
+                                View
+                            </a>
+                        </div>
                     </div>
-                </div>
-            {% endfor %}
+                {% endfor %}
+            </div>
         </div>
     </section>
 {% endblock %}
