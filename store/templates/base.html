@@ -112,32 +112,6 @@
             </div>
         </div>
     </footer>
-    <script>
-        let cartCount = 0;
-
-        function addToCart() {
-            cartCount++;
-            document.getElementById('cart-count').textContent = cartCount;
-
-            // Show notification
-            const notification = document.createElement('div');
-            notification.className = 'fixed bottom-16 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transform transition-transform duration-300 ease-in-out';
-                 notification.textContent = 'Product added to cart!';
-            document.body.appendChild(notification);
-
-           // Slide in notification
-        setTimeout(() => {
-            notification.style.transform = 'translateY(0)';
-        }, 10);
-
-        // Remove notification after 2 seconds
-        setTimeout(() => {
-            notification.style.transform = 'translateY(-100%)';  // Slide out
-            setTimeout(() => {
-                notification.remove();
-            }, 300);  // Wait for slide-out animation to complete
-        }, 2000);
-    }
-</script>
+ 
 </body>
 </html>
