@@ -114,7 +114,8 @@
 
     <!-- Featured Products Section -->
 <section id="products" class="relative bg-white text-gray-800 py-14 overflow-hidden">
-    <div class="absolute inset-0 bg-pattern opacity-10"></div>
+    <div class="absolute inset-0 bg-pattern opacity-10">
+    </div>
     <div class="container mx-auto px-6 lg:px-16">
         <!-- Section Heading -->
         <div class="text-left mb-12">
@@ -142,7 +143,7 @@
                     <!-- Buttons -->
                     <div class="flex justify-between items-center">
                         <!-- Add to Cart -->
-                        <!-- <button 
+                        <button 
                             class="text-gray-900 px-4 py-2 rounded hover:text-blue-600 flex items-center gap-2"
                              onclick="addToCart('{{ product.id }}')"
                         >
@@ -150,9 +151,9 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m-.4 0L3 3m4 10l.4 2m.6 6a2 2 0 100-4 2 2 0 000 4zm10 0a2 2 0 100-4 2 2 0 000 4z" />
                             </svg>
                         </button>
-                        <br> -->
+                        <br>
                         
-                        <button id="addToCart" value="{{ product.id }}" class="btn btn-primary">Add to Cart</button>
+                        <!-- <button id="addToCart" value="{{ product.id }}" class="btn btn-primary">Add to Cart</button> -->
 
 
                         <!-- View Product -->
@@ -179,7 +180,7 @@
         </style>
         
      <!-- JavaScript for Cart -->
-        <script>
+        <!-- <script>
          
             $(document).on('click','#addToCart',function(e){
             e.preventDefault();
@@ -203,7 +204,7 @@
                 }
             });
         })
-        </script>
+        </script> -->
         <script>
             let cartCount = 0;
     
