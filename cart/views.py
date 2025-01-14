@@ -39,17 +39,17 @@ def cart_add(request):
             product_id = int(request.POST.get('product.id', 0))
             # Lookup product in the database
             product = get_object_or_404(Product, id=product_id)
-            # Add the product to the cart
+           
             cart.add(product=product)
             
-            # Return the updated cart item count
-            cart_count = cart.__len__()  # Get the number of items in the cart
+           
+            cart_count = cart.__len__() 
             return JsonResponse({'Product Name': product.name, 'cart_count': cart_count})
         except (ValueError, TypeError):
-            # Handle invalid product ID or missing product ID
+        
             return HttpResponseBadRequest("Invalid product ID")
     
-    # Default response for invalid or non-POST requests
+    
     return HttpResponseBadRequest("Invalid request")
 
 
