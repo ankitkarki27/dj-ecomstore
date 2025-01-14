@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block content %}
+<br><br><br>
+<div class="container mx-auto py-8">
+    <h2 class="text-3xl font-bold mb-6 text-center text-gray-800">Shopping Cart</h2>
+
+    <!-- Display messages dynamically -->
+    <div id="message-container">
+        {% if messages %}
+        <div class="alert alert-success bg-green-100 text-green-700 p-4 rounded-lg mb-6">
+            {% for message in messages %}
+            <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="overflow-x-auto bg-white shadow-lg rounded-lg">
+        <table class="min-w-full table-auto">
+            <thead>
+                <tr class="bg-gray-200 text-gray-700">
+                    <th class="py-4 px-6 text-left">Image</th>
+                    <th class="py-4 px-6 text-left">Product</th>
+                    <th class="py-4 px-6 text-left">Price</th>
+                    <th class="py-4 px-6 text-left">Quantity</th>
+                    <th class="py-4 px-6 text-left">Total</th>
+                    <th class="py-4 px-6 text-left">Action</th>
+                </tr>
+            </thead>
+            <tbody id="cart-items">
+                {% for item in cart %}
+                <tr class="hover:bg-gray-50 transition-all duration-300" id="cart-item-{{ item.product.id }}">
+                    <td class="py-4 px-6">
+                        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="w-16 h-16 object-cover rounded-lg shadow-md">
+                    </td>
+                    <td class="py-4 px-6">{{ item.product.name }}</td>
+                    <td class="py-4 px-6 text-gray-800">Rs{{ item.product.price }}</td>
+                    <td class="py-4 px-6">
+                        <input type="number" value="{{ item.quantity }}" min="1" class="quantity-input w-20 text-center rounded-lg border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" data-product-id="{{ item.product.id }}">
+                    </td>
+                    <td class="py-4 px-6 text-gray-800 font-semibold item-total">Rs{{ item.total }}</td>
+                    <td class="py-4 px-6">
+                        <button class="remove-item text-red-500 hover:underline" data-product-id="{{ item.product.id }}">
+                            <i class="fas fa-remove text-1xl text-red"></i>
+                        </button>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center py-6 text-gray-500">Your cart is empty.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Display the total amount -->
+    <div class="flex justify-between items-center mt-6 text-lg font-semibold text-gray-800">
+        <span>Total Amount:</span>
+        <span id="total-amount">Rs{{ total_amount }}</span>
+    </div>
+
+    <div class="mt-6 flex justify-end">
+        <a href="#" class="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-all duration-300">Proceed to Checkout</a>
+    </div>
+</div>
+
+{% block scripts %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+{% endblock %}
+
+{% endblock %}

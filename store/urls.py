@@ -10,4 +10,5 @@ urlpatterns = [
     path('logout/',views.logout_page, name='logout'),
     path('product/<int:pk>',views.product_page, name='product'),
     path('category/<str:foo>',views.category_page, name='category'),
+ 
 ]

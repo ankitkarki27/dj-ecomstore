@@ -1,16 +1,12 @@
-from django.contrib import admin
+# cart/urls.py
 from django.urls import path
-from .import views
+from . import views
 
 app_name = 'cart'
 
-    
 urlpatterns = [
-   path('',views.cart_summary,name='cart_summary'),
-   path('add/',views.cart_add,name='cart_add'),
-   path('delete/',views.cart_delete,name='cart_delete'),
-   path('update/',views.cart_update,name='cart_update'),
+    path('', views.cart_summary, name='cart_summary'),  # View cart summary
+    path('add/', views.cart_add, name='cart_add'),  # Add item to cart
+    path('delete/', views.cart_delete, name='cart_delete'),  # Remove item from cart (using POST)
+    path('update/', views.cart_update, name='cart_update'),  # Update cart item quantity
 ]
-
-
-

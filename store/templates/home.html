@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block content %}
-<section id="home" class="relative bg-white text-gray-800 py-14 overflow-hidden">
+<section id="home" class="relative bg-white text-gray-800 py-4 overflow-hidden">
     <div class="absolute inset-0 bg-pattern opacity-10"></div>
     <div class="container mx-auto px-4 py-20 relative z-10 flex flex-col md:flex-row items-center justify-between space-y-10 md:space-y-0">
         <!-- Text Section -->
@@ -46,8 +46,8 @@
         <!-- Image Section -->
         <div class="md:w-1/2 flex justify-center">
             <div class="relative">
-                <div class="absolute inset-2 bg-gray-100 rounded-3xl transform -rotate-6"></div>
-                <img src="{% static 'assests/banner.jpg' %}" alt="Winter Clothing" class="relative z-10 rounded-3xl shadow-2xl transform hover:scale-105 transition-transform duration-300">
+                <div class="absolute inset-2"></div>
+                <img src="{% static 'assests/image.png' %}" alt="hero image" class="relative z-10">
             </div>
         </div>
     </div>
@@ -63,7 +63,7 @@
 
 
     <!-- Categories Section -->
-<section id="categories" class="relative bg-white text-gray-800 py-14 overflow-hidden">
+<section id="categories" class="relative px-4 bg-white text-gray-800  py-6 overflow-hidden">
     <!-- <div class="absolute inset-0 bg-pattern opacity-10"></div> -->
     <div class="container mx-auto px-6 lg:px-16">
         <!-- Section Heading -->
@@ -142,28 +142,15 @@
                     
                     <!-- Buttons -->
                     <div class="flex justify-between items-center">
-                        <!-- Add to Cart -->
-                        <button 
-                            class="text-gray-900 px-4 py-2 rounded hover:text-blue-600 flex items-center gap-2"
-                             onclick="addToCart('{{ product.id }}')"
-                        >
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m-.4 0L3 3m4 10l.4 2m.6 6a2 2 0 100-4 2 2 0 000 4zm10 0a2 2 0 100-4 2 2 0 000 4z" />
-                            </svg>
-                        </button>
-                        <br>
-                        
-                        <!-- <button id="addToCart" value="{{ product.id }}" class="btn btn-primary">Add to Cart</button> -->
+                        <button onclick="addToCart('{{ product.id }}')" class="btn btn-primary">
+                            <i class="fas fa-shopping-cart text-xl"></i>
+                        </button>                        
 
-
-                        <!-- View Product -->
                         <a 
                             href="/product/{{ product.id }}" 
                             class="bg-gray-100 text-gray-700 px-4 py-2 rounded hover:bg-gray-200 flex items-center gap-2"
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276a1 1 0 00-.553-1.894L9 7m0 0l6 6M9 7H5a2 2 0 00-2 2v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-4m-5-1v4m0 0H9" />
-                            </svg>
+                        <!-- <i class="fas fa-eye text-xl"></i> -->
                             View
                         </a>
                     </div>
@@ -179,59 +166,52 @@
             }
         </style>
         
-     <!-- JavaScript for Cart -->
-        <!-- <script>
-         
-            $(document).on('click','#addToCart',function(e){
-            e.preventDefault();
-           
-            $.ajax({
-                type:'POST',
-                url:'{% url 'cart:cart_add' %}', 
-                data:{
-                    product_id:$('#addToCart').val(),
-                    scrfmiddlewaretoken:'{{csrf_token}}',
-                    action: 'post'
-                },
-
-                success:function(json){
-                    console.log(json)
-
-                },
-
-                error:function(xhr,errmsg,err){
-
-                }
-            });
-        })
-        </script> -->
         <script>
             let cartCount = 0;
+        
+            function addToCart(productId) {
+                fetch('/cart/add/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRFToken': '{{ csrf_token }}', // Use Django's CSRF token
+                    },
+                    body: new URLSearchParams({ 'action': 'post', 'product.id': productId })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.cart_count) {
+                        cartCount = data.cart_count; // Update cart count from the server response
+                        document.getElementById('cart-count').textContent = cartCount;
+        
+                        // Show notification
+                        const notification = document.createElement('div');
+                        notification.className = 'fixed bottom-16 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transform transition-transform duration-300 ease-in-out';
+                        notification.textContent = `Product added: ${data['Product Name']}`;
+                        document.body.appendChild(notification);
+        
+                        // Slide in notification
+                        setTimeout(() => {
+                            notification.style.transform = 'translateY(0)';
+                        }, 10);
+        
+                        // Remove notification after 2 seconds
+                        setTimeout(() => {
+                            notification.style.transform = 'translateY(-100%)'; // Slide out
+                            setTimeout(() => {
+                                notification.remove();
+                            }, 300); // Wait for slide-out animation to complete
+                        }, 2000);
+                    } else {
+                        console.error('Failed to update cart count.');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        </script>
+        
+
     
-            function addToCart() {
-                cartCount++;
-                document.getElementById('cart-count').textContent = cartCount;
-    
-                // Show notification
-                const notification = document.createElement('div');
-                notification.className = 'fixed bottom-16 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transform transition-transform duration-300 ease-in-out';
-                     notification.textContent = 'Product added to cart!';
-                document.body.appendChild(notification);
-    
-               // Slide in notification
-            setTimeout(() => {
-                notification.style.transform = 'translateY(0)';
-            }, 10);
-    
-            // Remove notification after 2 seconds
-            setTimeout(() => {
-                notification.style.transform = 'translateY(-100%)';  // Slide out
-                setTimeout(() => {
-                    notification.remove();
-                }, 300);  // Wait for slide-out animation to complete
-            }, 2000);
-        }
-    </script>
     </section>
     
     

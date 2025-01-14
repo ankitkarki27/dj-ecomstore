@@ -49,9 +49,12 @@
                     </div>
 
                     <!-- Cart Icon -->
-                    <a href="{% url 'cart:cart_summary' %}"  class="text-gray-800 hover:text-blue-500 flex items-center">
+                  
+                        <a href="{% url 'cart:cart_summary' %}" class="relative text-gray-800 hover:text-blue-500 flex items-center">
                         <i class="fas fa-shopping-cart text-xl"></i>
-                        <span class="ml-1" id="cart-count">{{ cart_item_count|default:0 }}</span>
+                        <span id="cart-count" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full px-2 py-1">
+                            {{ cart_item_count|default:0 }}
+                        </span>
                     </a>
                     
                     <!-- User Authentication Links -->
@@ -112,6 +115,31 @@
             </div>
         </div>
     </footer>
- 
+ <!-- JavaScript for Cart Count -->
+ <script>
+    $(document).ready(function () {
+        // Example of dynamic cart update
+        $('.add-to-cart').click(function (e) {
+            e.preventDefault();
+            const productId = $(this).data('product-id');
+            $.ajax({
+                type: 'POST',
+                url: '/cart/add/',
+                data: {
+                    product_id: productId,
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                success: function (response) {
+                    // Update the cart count
+                    $('#cart-count').text(response.cart_count);
+                    alert('Item added to cart!');
+                },
+                error: function () {
+                    alert('Error adding item to cart. Please try again.');
+                }
+            });
+        });
+    });
+</script>
 </body>
 </html>
