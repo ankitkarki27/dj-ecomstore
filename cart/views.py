@@ -105,3 +105,41 @@ def cart_update(request):
             return JsonResponse({'success': False, 'message': 'Invalid quantity value.'})
 
     return JsonResponse({'success': False, 'message': 'Invalid request method.'})
+
+# from django.shortcuts import render, redirect
+# from django.http import HttpResponse
+# from .models import Order
+# from django.conf import settings
+
+# def payment_success(request):
+#     if request.method == 'POST':
+#         # Extract payment details from the POST request sent by eSewa
+#         pid = request.POST.get('pid')  # Order ID (payment ID)
+#         amt = request.POST.get('amt')  # Amount paid
+#         status = request.POST.get('status')  # Payment status (e.g., 'Success')
+#         scd = request.POST.get('scd')  # Merchant Code
+#         transaction_id = request.POST.get('txnid')  # eSewa transaction ID
+
+#         # Verify payment status and merchant code
+#         if status == 'Success' and scd == settings.ESAWA_MERCHANT_CODE:  # Replace with your actual merchant code
+#             try:
+#                 # Find the order with the order_id (pid) and update the payment status
+#                 order = Order.objects.get(id=pid)  # Use order ID to retrieve the order
+#                 order.payment_status = 'Paid'  # Update payment status
+#                 order.payment_transaction_id = transaction_id  # Store eSewa transaction ID
+#                 order.payment_amount = amt  # Store payment amount
+#                 order.status = True  # Set the order status to "Paid"
+#                 order.save()
+
+#                 # Return success page
+#                 return render(request, 'payment_success.html', {'order': order})
+#             except Order.DoesNotExist:
+#                 # If order doesn't exist, handle the error (you might want to log it or show an error message)
+#                 return HttpResponse('Order not found', status=404)
+#         else:
+#             # Payment failed, redirect to failure page
+#             return redirect('payment_failure')
+
+# def payment_failure(request):
+#     # Return failure page if payment failed
+#     return render(request, 'payment_failure.html')

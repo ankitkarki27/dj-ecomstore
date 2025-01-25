@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eSewa Payment</title>
+    <script>
+        // Automatically submit the form when the page is loaded
+        window.onload = function() {
+            document.getElementById("esewa-payment-form").submit();
+        };
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2 class="text-2xl font-bold text-center mt-6">Redirecting to eSewa...</h2>
+        
+        <!-- eSewa Payment Form -->
+        <form id="esewa-payment-form" action="https://uat.esewa.com.np/epay/main" method="POST">
+            <!-- Total Amount including delivery charge -->
+            <input type="hidden" name="tAmt" value="{{ total_amount|add:100 }}">
+
+            <!-- Item amount (excluding delivery charge) -->
+            <input type="hidden" name="amt" value="{{ total_amount }}">
+
+            <!-- Transaction amount (delivery charge) -->
+            <input type="hidden" name="txAmt" value="100">
+
+            <!-- Product Code (Merchant's eSewa merchant code) -->
+            <input type="hidden" name="scd" value="YOUR_MERCHANT_CODE">
+
+            <!-- Success URL -->
+            <input type="hidden" name="su" value="http://yourwebsite.com/payment_success">
+
+            <!-- Failure URL -->
+            <input type="hidden" name="fu" value="http://yourwebsite.com/payment_failure">
+
+            <!-- Order ID (Unique order identifier) -->
+            <input type="hidden" name="pid" value="{{ order_id }}">
+
+            <!-- Product Name -->
+            <input type="hidden" name="productName" value="Product Name">
+
+            <!-- Submit button (in case auto-submit fails) -->
+            <button type="submit" style="display: none;">Proceed to eSewa</button>
+        </form>
+    </div>
+</body>
+</html>

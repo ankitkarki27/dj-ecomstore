@@ -58,5 +58,27 @@ class Order(models.Model):
     
     def __str__(self):
         return self.product
+
+# from django.db import models
+# import datetime
+
+# class Order(models.Model):
+#     Product = models.ForeignKey('Product', on_delete=models.CASCADE)
+#     Customer = models.ForeignKey('Customer', on_delete=models.CASCADE)
+#     quantity = models.IntegerField(default=1)
+#     address = models.CharField(max_length=100, default='', blank=True)
+#     phone = models.CharField(max_length=10)
+#     date = models.DateField(default=datetime.datetime.today)
+#     status = models.BooleanField(default=False)  # Payment status (False = Pending, True = Paid)
+    
+#     # Added fields for payment information
+#     payment_status = models.CharField(max_length=20, default='Pending')  # 'Pending', 'Paid', 'Failed'
+#     payment_transaction_id = models.CharField(max_length=100, blank=True, null=True)  # Store transaction ID for payment
+#     payment_method = models.CharField(max_length=20, blank=True, null=True)  # 'eSewa', 'COD'
+#     payment_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # Payment amount (in currency)
+
+#     def __str__(self):
+#         return f"Order {self.id} by {self.Customer.name}"
+
     
 

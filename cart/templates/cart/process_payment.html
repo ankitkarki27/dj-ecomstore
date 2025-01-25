@@ -1,0 +1,18 @@
+<form action="https://uat.esewa.com.np/epay/main" method="POST">
+    <input type="hidden" name="tAmt" value="{{ total_amount|add:100 }}">
+    <input type="hidden" name="amt" value="{{ total_amount }}">
+    <input type="hidden" name="txAmt" value="100">
+    <input type="hidden" name="psc" value="0">
+    <input type="hidden" name="pdc" value="0">
+    <input type="hidden" name="scd" value="YOUR_MERCHANT_CODE">
+    <input type="hidden" name="su" value="YOUR_SUCCESS_URL">
+    <input type="hidden" name="fu" value="YOUR_FAILURE_URL">
+
+    <!-- Order details -->
+    <input type="hidden" name="pid" value="ORDER_ID">
+    <input type="hidden" name="productName" value="Product Name">
+
+    <button type="submit" class="w-full bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition">
+        Proceed to eSewa
+    </button>
+</form>
