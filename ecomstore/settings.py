@@ -15,8 +15,8 @@ SECRET_KEY = 'django-insecure-w=#pt=f)jo$95x3(y(j4jwb*z8cw-^+(&=w!^m!r)acta%gvqu
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS=[]
+# ALLOWED_HOSTS = ['ankitkarki27.pythonanywhere.com']
 
 # Application definition
 
@@ -40,6 +40,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+
 
 ROOT_URLCONF = 'ecomstore.urls'
 
