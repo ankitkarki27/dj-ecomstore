@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block content %}
-<div class="bg-white min-h-screen py-12">
+<div class="bg-white min-h-screen py-12 mt-12">
   <div class="container mx-auto px-4">
     <!-- Back Button -->
     <a href="javascript:history.back()" class="flex items-center text-blue-600 hover:text-blue-800 mb-6">
@@ -25,7 +25,7 @@
         <!-- Product Details -->
         <div class="md:w-1/2">
           <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ product.name }}</h1>
-          
+           <p class="text-gray-600 text-sm my-1">{{ product.Category }}</p>
           <div class="flex items-center mb-6">
             <span class="text-2xl font-bold text-gray-900 mr-3">Rs {{ product.price }}</span>
             {% if product.original_price %}
@@ -49,46 +49,85 @@
           </div>
         </div>
       </div>
+
+      
+    <!-- Similar Products Section -->
+{% if similar_products %}
+<div class="mt-16 border-t border-gray-100 pt-12">
+  <h3 class="text-2xl font-bold text-gray-900 mb-6">Recommended Products</h3>
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+    {% for product, similarity in similar_products %}
+      {% if product.id %}
+      <div class="group relative">
+        <a href="{% url 'product_page' product.id %}" class="block">
+          <div class="aspect-square bg-gray-50 rounded-lg overflow-hidden relative">
+            <div class="absolute top-2 right-2 bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded-full">
+              {{ similarity|floatformat:2 }} match
+            </div>
+            {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" 
+                 class="w-full h-full object-cover object-center group-hover:opacity-75 transition-opacity">
+            {% endif %}
+          </div>
+          <div class="mt-3">
+            <h4 class="text-sm font-medium text-gray-900">{{ product.name }}</h4>
+             <p class="text-gray-600 text-sm my-1">{{ product.Category }}</p>
+            <p class="text-xs font-small text-gray-900">Similarity Score:{{ similarity|floatformat:2 }} match</p>
+            <div class="flex items-center mt-1">
+              <span class="text-sm font-medium text-gray-900">Rs {{ product.price }}</span>
+              {% if product.sale_price %}
+              <span class="text-xs text-gray-500 line-through ml-2">Rs {{ product.sale_price }}</span>
+              {% endif %}
+            </div>
+          </div>
+        </a>
+      </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
     </div>
   </div>
 </div>
 
 <script>
   function addToCart(productId) {
-    fetch('/cart/add/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'X-CSRFToken': '{{ csrf_token }}',
-      },
-      body: new URLSearchParams({ 'action': 'post', 'product.id': productId })
+    fetch('{% url "cart:cart_add" %}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRFToken': '{{ csrf_token }}',
+        },
+        body: new URLSearchParams({
+            'product.id': productId
+        })
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) throw new Error('Network error');
+        return response.json();
+    })
     .then(data => {
-      if (data.cart_count) {
-        // Update cart count
-        document.getElementById('cart-count').textContent = data.cart_count;
-        
         // Show notification
-        const notification = document.createElement('div');
-        notification.className = 'fixed bottom-6 right-6 bg-green-500 text-white px-5 py-3 rounded-lg shadow-lg flex items-center animate-fade-in';
-        notification.innerHTML = `
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-          </svg>
-          ${data['Product Name']} added to cart
-        `;
-        document.body.appendChild(notification);
+        const notification = document.getElementById('cart-notification');
+        notification.textContent = `${data.product_name} added to cart`;
+        notification.classList.remove('hidden');
         
-        // Remove notification after 3 seconds
+        // Update cart count in all elements
+        document.querySelectorAll('.cart-count').forEach(el => {
+            el.textContent = data.cart_count || 0;  // Fallback to 0 if undefined
+        });
+        
+        // Hide after 3 seconds
         setTimeout(() => {
-          notification.classList.add('animate-fade-out');
-          setTimeout(() => notification.remove(), 300);
+            notification.classList.add('hidden');
         }, 3000);
-      }
     })
-    .catch(error => console.error('Error:', error));
-  }
+    .catch(error => {
+        console.error('Cart error:', error);
+        alert('Failed to add to cart. Please try again.');
+    });
+}
 </script>
 
 <style>

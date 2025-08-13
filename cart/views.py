@@ -1,145 +1,138 @@
-from django.shortcuts import render, get_object_or_404
-from django.http import JsonResponse, HttpResponseBadRequest
+from django.shortcuts import render, get_object_or_404, redirect
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
 from store.models import Product
-from .cart import Cart
-from django.contrib import messages
+from .models import Cart, CartItem
 
+@login_required
 def cart_summary(request):
     """Display the cart summary with calculated totals."""
-    cart = Cart(request)
-    cart_items = []
-    total_amount = 0
+    if request.user.is_authenticated:
+        # For logged-in users: use database cart
+        cart, created = Cart.objects.get_or_create(user=request.user)
+        cart_items = cart.items.all()  # Get all related CartItem objects
+    else:
+        # For guests: use session cart
+        session_cart = request.session.get('cart', {})
+        product_ids = session_cart.keys()
+        products = Product.objects.filter(id__in=product_ids)
+        cart_items = []
+        for product in products:
+            cart_items.append({
+                'product': product,
+                'quantity': session_cart[str(product.id)],
+                'total': product.price * session_cart[str(product.id)]
+            })
 
-    for item in cart:
-        product = item['product']
-        quantity = item['quantity']
-        item_total = product.price * quantity
-        total_amount += item_total
-
-        cart_items.append({
-            'product': product,
-            'quantity': quantity,
-            'total': item_total,
-        })
+    total_amount = sum(
+        item.product.price * item.quantity if hasattr(item, 'product') 
+        else item['product'].price * item['quantity'] 
+        for item in cart_items
+    )
 
     context = {
-        'cart': cart_items,
+        'cart_items': cart_items,
         'total_amount': total_amount,
     }
     return render(request, 'cart/cart.html', context)
 
 def cart_add(request):
-    # Get the cart
-    cart = Cart(request)
-    
-    # Check if the request is a POST with the correct action
-    if request.method == "POST" and request.POST.get('action') == 'post':
-        try:
-            # Get product ID
-            product_id = int(request.POST.get('product.id', 0))
-            # Lookup product in the database
-            product = get_object_or_404(Product, id=product_id)
-           
-            cart.add(product=product)
-            
-           
-            cart_count = cart.__len__() 
-            return JsonResponse({'Product Name': product.name, 'cart_count': cart_count})
-        except (ValueError, TypeError):
+    if request.method == "POST":
+        product_id = request.POST.get('product.id')
+        if not product_id:
+            return JsonResponse({'error': 'Product ID missing'}, status=400)
         
-            return HttpResponseBadRequest("Invalid product ID")
+        try:
+            product = Product.objects.get(id=product_id)
+            response_data = {
+                'success': True,
+                'product_name': product.name,
+                'product_id': product.id
+            }
+
+            if request.user.is_authenticated:
+                cart, created = Cart.objects.get_or_create(user=request.user)
+                cart_item, created = CartItem.objects.get_or_create(
+                    cart=cart,
+                    product=product,
+                    defaults={'quantity': 1}
+                )
+                if not created:
+                    cart_item.quantity += 1
+                    cart_item.save()
+                response_data['cart_count'] = cart.items.count()
+            else:
+                cart = request.session.get('cart', {})
+                cart_key = str(product.id)
+                cart[cart_key] = cart.get(cart_key, 0) + 1
+                request.session['cart'] = cart
+                request.session.modified = True
+                response_data['cart_count'] = sum(cart.values())
+
+            return JsonResponse(response_data)
+
+        except Product.DoesNotExist:
+            return JsonResponse({'error': 'Product not found'}, status=404)
     
-    
-    return HttpResponseBadRequest("Invalid request")
+    return JsonResponse({'error': 'Invalid request'}, status=400)
 
-
-
+@login_required
 def cart_delete(request):
-    """Remove an item from the cart."""
     if request.method == "POST":
         product_id = request.POST.get('product_id')
         if not product_id:
-            return JsonResponse({'success': False, 'message': 'Product ID is required.'})
+            return JsonResponse({'success': False, 'message': 'Product ID required'})
+        
+        try:
+            cart_item = CartItem.objects.get(
+                cart__user=request.user,
+                product_id=product_id
+            )
+            cart_item.delete()
+            
+            cart = Cart.objects.get(user=request.user)
+            return JsonResponse({
+                'success': True,
+                'cart_total': sum(item.product.price * item.quantity for item in cart.items.all())
+            })
+            
+        except CartItem.DoesNotExist:
+            return JsonResponse({'success': False, 'message': 'Item not in cart'})
+    
+    return JsonResponse({'error': 'Invalid request'}, status=400)
 
-        cart = Cart(request)
-        cart.remove(product_id)
-
-        return JsonResponse({
-            'success': True,
-            'message': 'Item removed from cart.',
-            'cart_total': cart.get_total_price(),
-        })
-    return HttpResponseBadRequest("Invalid request method.")
-
+@login_required
 def cart_update(request):
-    """Update the quantity of an item in the cart."""
     if request.method == "POST":
         product_id = request.POST.get('product_id')
         quantity = request.POST.get('quantity')
-
-        # Ensure the product ID and quantity are provided
+        
         if not product_id or not quantity:
-            return JsonResponse({'success': False, 'message': 'Product ID and quantity are required.'})
-
+            return JsonResponse({'success': False, 'message': 'Missing parameters'})
+        
         try:
-            quantity = int(quantity)  # Ensure quantity is an integer
+            quantity = int(quantity)
             if quantity < 1:
-                return JsonResponse({'success': False, 'message': 'Quantity must be at least 1.'})
-
-            # Get the cart instance and update the quantity
-            cart = Cart(request)
-            cart.update(product_id, quantity)  # The update method in Cart class updates the quantity
-
-            # Calculate the new total prices
-            item_total = cart.get_item_total(product_id)  # Get the updated total for this item
-            cart_total = cart.get_total_price()  # Get the updated total cart price
-
-            # Return the updated information in the response
+                return JsonResponse({'success': False, 'message': 'Invalid quantity'})
+            
+            cart_item = CartItem.objects.get(
+                cart__user=request.user,
+                product_id=product_id
+            )
+            cart_item.quantity = quantity
+            cart_item.save()
+            
+            cart = Cart.objects.get(user=request.user)
+            item_total = cart_item.product.price * quantity
+            cart_total = sum(item.product.price * item.quantity for item in cart.items.all())
+            
             return JsonResponse({
                 'success': True,
-                'message': 'Cart updated successfully.',
-                'cart_total': cart_total,
                 'item_total': item_total,
+                'cart_total': cart_total
             })
-        except ValueError:
-            return JsonResponse({'success': False, 'message': 'Invalid quantity value.'})
-
-    return JsonResponse({'success': False, 'message': 'Invalid request method.'})
-
-# from django.shortcuts import render, redirect
-# from django.http import HttpResponse
-# from .models import Order
-# from django.conf import settings
-
-# def payment_success(request):
-#     if request.method == 'POST':
-#         # Extract payment details from the POST request sent by eSewa
-#         pid = request.POST.get('pid')  # Order ID (payment ID)
-#         amt = request.POST.get('amt')  # Amount paid
-#         status = request.POST.get('status')  # Payment status (e.g., 'Success')
-#         scd = request.POST.get('scd')  # Merchant Code
-#         transaction_id = request.POST.get('txnid')  # eSewa transaction ID
-
-#         # Verify payment status and merchant code
-#         if status == 'Success' and scd == settings.ESAWA_MERCHANT_CODE:  # Replace with your actual merchant code
-#             try:
-#                 # Find the order with the order_id (pid) and update the payment status
-#                 order = Order.objects.get(id=pid)  # Use order ID to retrieve the order
-#                 order.payment_status = 'Paid'  # Update payment status
-#                 order.payment_transaction_id = transaction_id  # Store eSewa transaction ID
-#                 order.payment_amount = amt  # Store payment amount
-#                 order.status = True  # Set the order status to "Paid"
-#                 order.save()
-
-#                 # Return success page
-#                 return render(request, 'payment_success.html', {'order': order})
-#             except Order.DoesNotExist:
-#                 # If order doesn't exist, handle the error (you might want to log it or show an error message)
-#                 return HttpResponse('Order not found', status=404)
-#         else:
-#             # Payment failed, redirect to failure page
-#             return redirect('payment_failure')
-
-# def payment_failure(request):
-#     # Return failure page if payment failed
-#     return render(request, 'payment_failure.html')
+            
+        except (ValueError, CartItem.DoesNotExist):
+            return JsonResponse({'success': False, 'message': 'Invalid request'})
+    
+    return JsonResponse({'error': 'Invalid request'}, status=400)

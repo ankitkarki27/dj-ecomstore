@@ -2,197 +2,114 @@
 {% load static %}
 
 {% block content %}
+
 <!-- Hero Section -->
-<section class="bg-white py-16">
-    <div class="container mx-auto px-4 flex flex-col md:flex-row items-center">
-        <!-- Text Content -->
-        <div class="md:w-1/2 mb-12 md:mb-0 md:pr-10">
-            <span class="inline-block bg-gray-100 text-gray-700 px-4 py-1 rounded-full text-sm mb-4">
-                New Season Collection
-            </span>
-            <h1 class="text-4xl md:text-5xl font-bold leading-tight mb-6">
-                Elevate Your <br>
-                <span class="text-blue-700">Everyday Style</span>
-            </h1>
-            <p class="text-gray-600 mb-8 text-lg">
-                Discover the perfect blend of comfort and elegance. 
-                Transform your wardrobe with timeless designs and 
-                modern fashion statements.
-            </p>
-            <div class="flex flex-col sm:flex-row gap-4">
-                <a href="#products" class="bg-blue-700 text-white px-8 py-3 rounded-md hover:bg-blue-600 transition font-medium text-center">
-                    Shop Now
-                </a>
-                <a href="#" class="border border-gray-300 text-gray-700 px-8 py-3 rounded-md hover:bg-gray-50 transition font-medium text-center">
-                    Explore More
-                </a>
-            </div>
-        </div>
-        
-        <!-- Hero Image -->
-        <div class="md:w-1/2 flex justify-center">
-            <img src="{% static 'assests/hero1.png' %}" alt="Fashionable outfit" class=" max-w-full h-auto">
-        </div>
+<section class="bg-white py-12">
+  <div class="container mx-auto px-6 flex flex-col md:flex-row items-center">
+    <div class="md:w-1/2 mb-8 md:mb-0">
+      <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+        Power Your <span class="text-blue-600">Work & Play</span>
+      </h1>
+      <p class="text-gray-600 mb-6 text-base">
+        Discover high-performance laptops for work, school, and gaming at prices you'll love.
+      </p>
+      <a href="#products" class="inline-block bg-blue-600 text-white font-medium px-6 py-3 rounded-lg mr-4 hover:bg-blue-700 transition">
+        Shop Now
+      </a>
+      <a href="#categories" class="inline-block border border-gray-300 text-gray-700 font-medium px-6 py-3 rounded-lg hover:bg-gray-100 transition">
+        Browse Categories
+      </a>
     </div>
+    <div class="md:w-1/2 flex justify-center">
+      <img src="{% static 'assests/hero2.png' %}" alt="Laptop" class="w-full max-w-md rounded-lg ">
+    </div>
+  </div>
 </section>
 
 <!-- Categories Section -->
-<section class="py-16 bg-white">
-    <div class="container mx-auto px-4">
-        <div class="text-center mb-12">
-            <h2 class="text-3xl font-bold text-gray-800 mb-4">Shop by Category</h2>
-            <p class="text-gray-600 max-w-2xl mx-auto">Browse our carefully curated collections</p>
-        </div>
-        
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <a href="{% url 'category' 'men' %}" class="group">
-                <div class="bg-white p-8 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 text-center h-full flex flex-col items-center justify-center">
-                    <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mb-4 group-hover:bg-blue-100 transition-colors">
-                        <span class="text-blue-700 font-bold text-xl">M</span>
-                    </div>
-                    <h3 class="font-semibold text-gray-800 text-lg">Men</h3>
-                </div>
-            </a>
-            
-            <a href="{% url 'category' 'women' %}" class="group">
-                <div class="bg-white p-8 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 text-center h-full flex flex-col items-center justify-center">
-                    <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mb-4 group-hover:bg-blue-100 transition-colors">
-                        <span class="text-blue-700 font-bold text-xl">W</span>
-                    </div>
-                    <h3 class="font-semibold text-gray-800 text-lg">Women</h3>
-                </div>
-            </a>
-            
-            <a href="{% url 'category' 'baby' %}" class="group">
-                <div class="bg-white p-8 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 text-center h-full flex flex-col items-center justify-center">
-                    <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mb-4 group-hover:bg-blue-100 transition-colors">
-                        <span class="text-blue-700 font-bold text-xl">B</span>
-                    </div>
-                    <h3 class="font-semibold text-gray-800 text-lg">Baby</h3>
-                </div>
-            </a>
-            
-            <a href="{% url 'category' 'shoes' %}" class="group">
-                <div class="bg-white p-8 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 text-center h-full flex flex-col items-center justify-center">
-                    <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mb-4 group-hover:bg-blue-100 transition-colors">
-                        <span class="text-blue-700 font-bold text-xl">S</span>
-                    </div>
-                    <h3 class="font-semibold text-gray-800 text-lg">Shoes</h3>
-                </div>
-            </a>
-        </div>
+<section id="categories" class="py-12 bg-white">
+  <div class="container mx-auto px-4">
+    <h2 class="text-2xl font-bold text-center mb-8">Shop by Category</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <a href="{% url 'store:category' 'budget-laptops' %}" class="p-6 text-center border rounded-lg hover:border-blue-400">
+        <i class="fas fa-wallet text-3xl text-blue-500 mb-3"></i>
+        <h3 class="font-medium">Budget</h3>
+      </a>
+      <a href="{% url 'store:category' 'gaming-laptops' %}" class="p-6 text-center border rounded-lg hover:border-blue-400">
+        <i class="fas fa-gamepad text-3xl text-blue-500 mb-3"></i>
+        <h3 class="font-medium">Gaming</h3>
+      </a>
+      <a href="{% url 'store:category' 'ultrabooks' %}" class="p-6 text-center border rounded-lg hover:border-blue-400">
+        <i class="fas fa-laptop text-3xl text-blue-500 mb-3"></i>
+        <h3 class="font-medium">Ultrabooks</h3>
+      </a>
+      <a href="{% url 'store:category' 'business-laptops' %}" class="p-6 text-center border rounded-lg hover:border-blue-400">
+        <i class="fas fa-briefcase text-3xl text-blue-500 mb-3"></i>
+        <h3 class="font-medium">Business</h3>
+      </a>
     </div>
+  </div>
 </section>
 
-<!-- Featured Products Section -->
-<section class="py-16 bg-white">
-    <div class="container mx-auto px-4">
-        <div class="text-center mb-12">
-            <h2 class="text-3xl font-bold text-gray-800 mb-2">Featured Products</h2>
-            <p class="text-gray-600">Discover our newest arrivals</p>
+<!-- Products Section -->
+<section id="products" class="py-12 bg-white">
+  <div class="container mx-auto px-4">
+    <h2 class="text-2xl font-bold text-center mb-8">Featured Products</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {% for product in products %}
+      <div class="border rounded-lg overflow-hidden hover:shadow-md">
+        <div class="relative">
+          <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-full object-contain p-4">
+          {% if product.is_new %}
+          <span class="absolute top-2 left-2 bg-green-100 text-green-800 text-xs px-2 py-1 rounded">New</span>
+          {% endif %}
+          {% if product.is_sale %}
+          <span class="absolute top-2 right-2 bg-red-100 text-red-800 text-xs px-2 py-1 rounded">Sale</span>
+          {% endif %}
         </div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {% for product in products %}
-            <div class="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 group">
-                <div class="relative overflow-hidden">
-                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-105">
-                    {% if product.is_new or product.is_sale %}
-                    <div class="absolute top-4 right-4 flex flex-col space-y-2">
-                        {% if product.is_new %}
-                        <span class="bg-blue-600 text-white text-xs px-3 py-1 rounded-full">New</span>
-                        {% endif %}
-                        {% if product.is_sale %}
-                        <span class="bg-red-500 text-white text-xs px-3 py-1 rounded-full">Sale</span>
-                        {% endif %}
-                    </div>
-                    {% endif %}
-                </div>
-                
-                <div class="p-6">
-                    <h3 class="font-semibold text-lg mb-1">{{ product.name }}</h3>
-                    <p class="text-gray-600 mb-4">Rs {{ product.price }}</p>
-                    
-                    <div class="flex justify-between items-center">
-                        <button onclick="addToCart('{{ product.id }}')" class="text-gray-700 hover:text-blue-600 transition-colors">
-                            <span class="flex items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                                </svg>
-                                Add to Cart
-                            </span>
-                        </button>
-                        
-                        <a href="/product/{{ product.id }}" class="text-blue-600 hover:text-blue-800 transition-colors font-medium">
-                            View Details
-                        </a>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
+        <div class="p-4">
+          <h3 class="font-medium">{{ product.name }}</h3>
+          <p class="text-gray-600 text-sm my-1">{{ product.category.name }}</p>
+          <p class="font-bold text-lg">Rs {{ product.price }}</p>
+          <div class="flex justify-between mt-4">
+            <button onclick="addToCart('{{ product.id }}')" class="text-gray-700 hover:text-blue-600">
+              <i class="fas fa-shopping-cart mr-1"></i> Add
+            </button>
+            <a href="{% url 'store:product_page' product.id %}" class="text-blue-600 hover:text-blue-800">
+              View Details
+            </a>
+          </div>
         </div>
+      </div>
+      {% endfor %}
     </div>
+  </div>
 </section>
+
+<!-- Cart Notification -->
+<div id="cart-notification" class="fixed bottom-4 right-4 hidden bg-green-500 text-white px-4 py-2 rounded">
+  Item added to cart!
+</div>
 
 <script>
-    function addToCart(productId) {
-        fetch('/cart/add/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'X-CSRFToken': '{{ csrf_token }}',
-            },
-            body: new URLSearchParams({ 'action': 'post', 'product.id': productId })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.cart_count) {
-                // Update cart count
-                document.getElementById('cart-count').textContent = data.cart_count;
-                
-                // Create and show notification
-                const notification = document.createElement('div');
-                notification.className = 'fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg animate-fade-in';
-                notification.innerHTML = `
-                    <div class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                        </svg>
-                        Added to cart: ${data['Product Name']}
-                    </div>
-                `;
-                document.body.appendChild(notification);
-                
-                // Remove notification after 3 seconds
-                setTimeout(() => {
-                    notification.classList.add('animate-fade-out');
-                    setTimeout(() => {
-                        notification.remove();
-                    }, 300);
-                }, 3000);
-            }
-        })
-        .catch(error => console.error('Error:', error));
-    }
+function addToCart(productId) {
+    fetch("{% url 'store:add_to_cart' %}", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: JSON.stringify({ 'product_id': productId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data.success){
+            const notif = document.getElementById('cart-notification');
+            notif.classList.remove('hidden');
+            setTimeout(()=> notif.classList.add('hidden'), 2000);
+        }
+    })
+}
 </script>
 
-<style>
-    .animate-fade-in {
-        animation: fadeIn 0.3s ease-out forwards;
-    }
-    
-    .animate-fade-out {
-        animation: fadeOut 0.3s ease-out forwards;
-    }
-    
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-    
-    @keyframes fadeOut {
-        from { opacity: 1; transform: translateY(0); }
-        to { opacity: 0; transform: translateY(20px); }
-    }
-</style>
 {% endblock %}

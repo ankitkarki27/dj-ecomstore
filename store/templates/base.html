@@ -7,16 +7,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Trendy{% endblock %}</title>
+    <meta name="csrf-token" content="{{ csrf_token }}"> <!-- Add CSRF meta tag -->
 
     <!-- FontAwesome and Tailwind CSS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <!-- jquery cdn -->
-     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
-    </head>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
 <body class="bg-gray-50">
 
     <!-- Header Section -->
@@ -26,19 +24,16 @@
 
                 <!-- Logo Section -->
                 <div class="flex items-center">
-                    <!-- Image Logo -->
                     <a href="/#home" class="flex items-center">
-                        <img src="{% static 'assests/logo/logo1.png' %}" alt="Trendy Wears Logo" class="h-10 w-auto">
-                        <!-- <span class="ml-2 text-gray-800 text-xl font-bold">Trendy Wears</span> -->
+                        <span class="ml-2 text-gray-800 text-xl font-bold">LaptopStore</span>
                     </a>
                 </div>
+
                 <!-- Navigation Links -->
                 <div class="flex items-center space-x-6">
                     <a href="/#home" class="text-gray-800 hover:text-blue-500">Home</a>
-                    <a href="/#about" class="text-gray-800 hover:text-blue-500">About</a>
+                    <!-- <a href="/#about" class="text-gray-800 hover:text-blue-500">About</a> -->
                     <a href="/#categories" class="text-gray-800 hover:text-blue-500">Category</a>
-                    <!-- <a href="#" class="text-gray-800 hover:text-blue-500">Women</a>
-                    <a href="#" class="text-gray-800 hover:text-blue-500">Sports</a> -->
                 </div>
 
                 <!-- Search Bar, Cart, and User Section -->
@@ -49,11 +44,14 @@
                     </div>
 
                     <!-- Cart Icon -->
-                  
-                        <a href="{% url 'cart:cart_summary' %}" class="relative text-gray-800 hover:text-blue-500 flex items-center">
+                    <a href="{% url 'cart:cart_summary' %}" class="relative text-gray-800 hover:text-blue-500 flex items-center">
                         <i class="fas fa-shopping-cart text-xl"></i>
                         <span id="cart-count" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full px-2 py-1">
-                            {{ cart_item_count|default:0 }}
+                            {% if request.user.is_authenticated %}
+                                {{ request.user.cart.items.count|default:0 }}
+                            {% else %}
+                                {{ request.session.cart.items|length|default:0 }}
+                            {% endif %}
                         </span>
                     </a>
                     
@@ -69,7 +67,7 @@
     </header>
 
     <!-- Main Content Wrapper -->
-    <main>
+    <main class="pt-16"> <!-- Added padding to account for fixed header -->
         {% block content %}
         <!-- Content from child templates will be inserted here -->
         {% endblock %}
@@ -77,69 +75,59 @@
 
     <!-- Footer Section -->
     <footer class="bg-gray-800 text-white">
-        <div class="container mx-auto px-6 py-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-
-                <!-- About Us -->
-                <div>
-                    <h3 class="text-lg font-semibold mb-4">About Us</h3>
-                    <p class="text-gray-400">Your trusted online shopping destination for all your needs.</p>
-                </div>
-
-                <!-- Quick Links -->
-                <div>
-                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-gray-400 hover:text-white">Home</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white">Contact Us</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white">FAQ</a></li>
-                    </ul>
-                </div>
-
-                <!-- Customer Service -->
-                <div>
-                    <h3 class="text-lg font-semibold mb-4">Customer Service</h3>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-gray-400 hover:text-white">Return Policy</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white">Shipping Info</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white">Track Order</a></li>
-                    </ul>
-                </div>
-
-                <!-- Stay Connected -->
-                <div>
-                    <h3 class="text-lg font-semibold mb-4">Stay Connected</h3>
-                    <p class="text-gray-400">Follow us on social media for exclusive deals and updates.</p>
-                </div>
-                <h2>trendywears@ copyright</h2>
-            </div>
-        </div>
+        <!-- Your existing footer content -->
     </footer>
- <!-- JavaScript for Cart Count -->
- <script>
-    $(document).ready(function () {
-        // Example of dynamic cart update
-        $('.add-to-cart').click(function (e) {
-            e.preventDefault();
-            const productId = $(this).data('product-id');
-            $.ajax({
-                type: 'POST',
-                url: '/cart/add/',
-                data: {
-                    product_id: productId,
-                    csrfmiddlewaretoken: '{{ csrf_token }}'
-                },
-                success: function (response) {
-                    // Update the cart count
-                    $('#cart-count').text(response.cart_count);
-                    alert('Item added to cart!');
-                },
-                error: function () {
-                    alert('Error adding item to cart. Please try again.');
-                }
+
+    <!-- Cart Notification -->
+    <div id="cart-notification" class="fixed bottom-4 right-4 hidden bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg">
+        Item added to cart!
+    </div>
+
+    <!-- JavaScript for Cart Functionality -->
+    <script>
+    function addToCart(productId) {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+        
+        fetch('{% url "cart:cart_add" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': csrfToken
+            },
+            body: new URLSearchParams({
+                'product.id': productId
+            })
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('Network error');
+            return response.json();
+        })
+        .then(data => {
+            if (data.error) {
+                console.error(data.error);
+                return;
+            }
+            
+            // Update notification
+            const notification = document.getElementById('cart-notification');
+            notification.textContent = `${data.product_name || 'Item'} added to cart`;
+            notification.classList.remove('hidden');
+            
+            // Update cart count everywhere
+            document.querySelectorAll('.cart-count').forEach(el => {
+                el.textContent = data.cart_count || 0;
             });
+            
+            // Hide notification after 3 seconds
+            setTimeout(() => {
+                notification.classList.add('hidden');
+            }, 3000);
+        })
+        .catch(error => {
+            console.error('Cart error:', error);
+            alert('Please login to add items to cart');
         });
-    });
-</script>
+    }
+    </script>
 </body>
 </html>
