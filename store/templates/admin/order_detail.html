@@ -1,0 +1,82 @@
+{% extends 'admin/base_admin.html' %}
+{% block content %}
+<section class="py-8">
+  <div class="max-w-4xl mx-auto">
+    <div class="flex items-center justify-between mb-6">
+      <h1 class="text-2xl font-bold">Order #{{ order.id }}</h1>
+      <a href="{% url 'store:admin_orders' %}" class="bg-black text-white px-4 py-2 rounded">Back</a>
+    </div>
+    <div class="grid md:grid-cols-3 gap-6 mb-8">
+      <div class="bg-white p-5 rounded shadow md:col-span-2 space-y-4">
+        <div class="flex justify-between items-center">
+          <p class="text-sm text-gray-500">Placed On</p>
+          <p class="text-sm font-medium">{{ order.date }}</p>
+        </div>
+        <div class="flex justify-between items-center">
+          <p class="text-sm text-gray-500">Customer</p>
+          <p class="text-sm font-medium">{{ order.customer }}</p>
+        </div>
+        <div class="flex justify-between items-center">
+          <p class="text-sm text-gray-500">Phone</p>
+          <p class="text-sm font-medium">{{ order.phone|default:'-' }}</p>
+        </div>
+        <div class="flex justify-between items-center">
+          <p class="text-sm text-gray-500">Address</p>
+          <p class="text-sm font-medium text-right">{{ order.address|default:'-' }}</p>
+        </div>
+        <div class="flex justify-between items-center">
+          <p class="text-sm text-gray-500">Payment Method</p>
+          <p class="text-sm font-medium uppercase">{% if payment %}{{ payment.method }}{% else %}-{% endif %}</p>
+        </div>
+        <div class="flex justify-between items-center">
+          <p class="text-sm text-gray-500">Status</p>
+          <p>
+            {% if order.canceled %}<span class="px-2 py-1 rounded text-xs bg-red-100 text-red-700">Canceled</span>
+            {% elif order.status %}<span class="px-2 py-1 rounded text-xs bg-green-100 text-green-700">Completed</span>
+            {% else %}<span class="px-2 py-1 rounded text-xs bg-yellow-100 text-yellow-700">Pending</span>{% endif %}
+          </p>
+        </div>
+      </div>
+      <div class="bg-white p-5 rounded shadow space-y-3">
+        <h2 class="font-semibold text-lg">Summary</h2>
+        <div class="flex justify-between text-sm"><span>Items</span><span>{{ order.items.count }}</span></div>
+        <div class="flex justify-between text-sm"><span>Total</span><span>Rs {{ order.total_amount }}</span></div>
+        <div class="pt-2 border-t">
+          {% if not order.canceled and not order.status %}
+            <a href="{% url 'store:admin_toggle_order_status' order.id %}?action=complete" class="block w-full text-center bg-black text-white px-4 py-2 rounded mb-2">Mark Complete</a>
+            <a href="{% url 'store:admin_toggle_order_status' order.id %}?action=cancel" class="block w-full text-center bg-black text-white px-4 py-2 rounded">Cancel Order</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded shadow overflow-hidden">
+      <table class="w-full text-sm">
+        <thead class="bg-gray-100 text-left">
+          <tr>
+            <th class="py-2 px-3">Product</th>
+            <th class="py-2 px-3">Qty</th>
+            <th class="py-2 px-3">Unit Price</th>
+            <th class="py-2 px-3">Line Total</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for item in order.items.all %}
+          <tr class="border-b last:border-0">
+            <td class="py-2 px-3 flex items-center gap-2">
+              <img src="{{ item.product.image.url }}" class="w-10 h-10 object-cover rounded" />
+              <span class="font-medium">{{ item.product.name }}</span>
+            </td>
+            <td class="py-2 px-3">{{ item.quantity }}</td>
+            <td class="py-2 px-3">Rs {{ item.price }}</td>
+            <td class="py-2 px-3 font-semibold">Rs {{ item.line_total }}</td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="4" class="py-6 text-center text-gray-500">No items</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+{% endblock %}

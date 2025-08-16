@@ -1,0 +1,62 @@
+{% extends 'admin/base_admin.html' %}
+{% block content %}
+<section class="py-10 bg-gray-50 min-h-screen">
+  <div class="max-w-6xl mx-auto px-4">
+    <div class="flex items-center justify-between mb-6">
+      <h1 class="text-2xl font-bold">Orders</h1>
+  <a href="{% url 'store:admin_dashboard' %}" class="text-sm text-blue-600">Back to Dashboard</a>
+    </div>
+    <div class="overflow-x-auto bg-white rounded shadow">
+      <table class="w-full text-sm">
+        <thead class="bg-gray-100 text-left">
+          <tr>
+            <th class="py-2 px-3">ID</th>
+            <th class="py-2 px-3">Customer</th>
+            <th class="py-2 px-3">Date</th>
+            <th class="py-2 px-3">Items</th>
+            <th class="py-2 px-3">Total</th>
+            <th class="py-2 px-3">Type</th>
+            <th class="py-2 px-3">Status</th>
+            <th class="py-2 px-3">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for o in orders %}
+          <tr class="border-b last:border-0">
+            <td class="py-2 px-3"><a href="{% url 'store:admin_order_detail' o.id %}" class="text-blue-600 hover:underline">#{{ o.id }}</a></td>
+            <td class="py-2 px-3">{{ o.customer }}</td>
+            <td class="py-2 px-3 text-xs">{{ o.date }}</td>
+            <td class="py-2 px-3">{{ o.items.count }}</td>
+            <td class="py-2 px-3">Rs {{ o.total_amount }}</td>
+            <td class="py-2 px-3 text-xs uppercase">{% if o.payment %}{{ o.payment.method }}{% else %}-{% endif %}</td>
+            <td class="py-2 px-3">
+              {% if o.canceled %}
+                <span class="px-2 py-1 text-xs rounded bg-red-100 text-red-700">Canceled</span>
+              {% elif o.status %}
+                <span class="px-2 py-1 text-xs rounded bg-green-100 text-green-700">Completed</span>
+              {% else %}
+                <span class="px-2 py-1 text-xs rounded bg-yellow-100 text-yellow-700">Pending</span>
+              {% endif %}
+            </td>
+            <td class="py-2 px-3 space-x-2 text-xs">
+              {% if not o.status and not o.canceled %}
+                <!-- <a href="{% url 'store:admin_toggle_order_status' o.id %}?action=complete" class="text-green-600 hover:underline">Complete</a> -->
+                  <a href="{% url 'store:admin_toggle_order_status' o.id %}?action=complete" class="inline-block bg-black text-white px-2 py-1 rounded hover:bg-gray-800">iscompleted?</a>
+                  <a href="{% url 'store:admin_toggle_order_status' o.id %}?action=cancel" class="inline-block bg-black text-white px-2 py-1 rounded hover:bg-gray-800">Cancel</a>
+                  <a href="{% url 'store:admin_order_detail' o.id %}" class="inline-block bg-black text-white px-2 py-1 rounded hover:bg-gray-800">view</a>
+              {% elif o.canceled %}
+                <span class="text-gray-400">--</span>
+              {% else %}
+                <span class="text-gray-400">--</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="7" class="py-6 text-center text-gray-500">No orders found.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+{% endblock %}

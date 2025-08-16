@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Search: {{ query }} | OC Store{% endblock %}
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-8">
+  <h1 class="text-2xl font-semibold mb-4">Search Results</h1>
+  <form action="{% url 'store:search' %}" method="get" class="mb-6">
+    <div class="flex gap-2">
+      <input type="text" name="q" value="{{ query }}" placeholder="Search products..." class="flex-1 border border-gray-300 rounded px-3 py-2" />
+      <button class="bg-black text-white px-5 py-2 rounded">Search</button>
+    </div>
+  </form>
+  {% if query and results %}
+    <p class="text-sm text-gray-600 mb-4">Found {{ results|length }} product{{ results|length|pluralize }} for "{{ query }}"</p>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+      {% for product in results %}
+      <div class="bg-white rounded shadow hover:shadow-md transition p-3 flex flex-col">
+        <a href="{% url 'store:product_page' product.id %}" class="block aspect-square overflow-hidden rounded mb-3 bg-gray-100">
+          {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-full object-cover" />
+          {% else %}
+            <div class="w-full h-full flex items-center justify-center text-gray-400 text-sm">No Image</div>
+          {% endif %}
+        </a>
+        <h3 class="font-medium text-gray-800 line-clamp-2 min-h-[40px]">{{ product.name }}</h3>
+        <p class="text-sm text-gray-500">{{ product.brand }}</p>
+        <div class="mt-2 mb-3">
+          <span class="font-semibold text-gray-900">₹{{ product.price }}</span>
+          {% if product.stock == 0 %}
+            <span class="ml-2 inline-block bg-red-600 text-white text-xs px-2 py-1 rounded">Out of Stock</span>
+          {% endif %}
+        </div>
+        <div class="mt-auto flex gap-2">
+          <a href="{% url 'store:product_page' product.id %}" class="flex-1 bg-gray-800 text-white text-sm py-2 rounded text-center hover:bg-gray-900">Details</a>
+          {% if product.stock > 0 %}
+            <button onclick="addToCart({{ product.id }})" type="button" class="flex-1 bg-black text-white text-sm py-2 rounded hover:bg-gray-900">Add</button>
+          {% else %}
+            <button disabled class="flex-1 bg-gray-400 text-white text-sm py-2 rounded cursor-not-allowed">Add</button>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  {% elif query %}
+    <p class="text-gray-600">No products found for "{{ query }}".</p>
+  {% else %}
+    <p class="text-gray-600">Enter a term above to search for products.</p>
+  {% endif %}
+</div>
+{% endblock %}

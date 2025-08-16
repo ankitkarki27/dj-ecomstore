@@ -1,0 +1,52 @@
+{% extends 'admin/base_admin.html' %}
+{% block content %}
+<section class="py-10 bg-gray-50 min-h-screen">
+  <div class="max-w-6xl mx-auto px-4">
+    <div class="flex items-center justify-between mb-6">
+      <h1 class="text-2xl font-bold">Products</h1>
+  <a href="{% url 'store:admin_add_product' %}" class="bg-black text-white px-4 py-2 rounded">Add Product</a>
+    </div>
+    <div class="overflow-x-auto bg-white rounded shadow">
+      <table class="w-full text-sm">
+        <thead class="bg-gray-100 text-left">
+          <tr>
+            <th class="py-2 px-3">ID</th>
+            <th class="py-2 px-3">Image</th>
+            <th class="py-2 px-3">Name</th>
+            <th class="py-2 px-3">Category</th>
+            <th class="py-2 px-3">Gender</th>
+            <th class="py-2 px-3">Price</th>
+            <th class="py-2 px-3">Stock</th>
+            <th class="py-2 px-3">Flags</th>
+            <th class="py-2 px-3">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for p in products %}
+          <tr class="border-b last:border-0">
+            <td class="py-2 px-3">{{ p.id }}</td>
+            <td class="py-2 px-3"><img src="{{ p.image.url }}" class="w-12 h-12 object-cover rounded" /></td>
+            <td class="py-2 px-3 font-medium">{{ p.name }}</td>
+            <td class="py-2 px-3">{{ p.category }}</td>
+            <td class="py-2 px-3">{{ p.gender }}</td>
+            <td class="py-2 px-3">Rs {{ p.price }}</td>
+            <td class="py-2 px-3">{{ p.stock }}</td>
+            <td class="py-2 px-3 text-xs">
+              {% if p.is_new %}<span class="px-2 py-1 bg-green-100 text-green-700 rounded">NEW</span>{% endif %}
+              {% if p.is_sale %}<span class="px-2 py-1 bg-red-100 text-red-700 rounded">SALE</span>{% endif %}
+              {% if p.stock <= 0 %}<span class="px-2 py-1 bg-black text-white rounded">OUT</span>{% endif %}
+            </td>
+            <td class="py-2 px-3 text-xs space-x-2">
+              <a href="{% url 'store:admin_edit_product' p.id %}" class="text-blue-600 hover:underline">Edit</a>
+              <a href="{% url 'store:admin_delete_product' p.id %}" onclick="return confirm('Delete this product?')" class="text-red-600 hover:underline">Delete</a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="8" class="py-6 text-center text-gray-500">No products found.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+{% endblock %}

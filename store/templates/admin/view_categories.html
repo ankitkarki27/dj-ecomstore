@@ -1,0 +1,36 @@
+{% extends 'admin/base_admin.html' %}
+{% block content %}
+<section class="py-10 bg-gray-50 min-h-screen">
+  <div class="max-w-3xl mx-auto px-4">
+    <div class="flex items-center justify-between mb-6">
+      <h1 class="text-2xl font-bold">Categories</h1>
+  <a href="{% url 'store:admin_add_category' %}" class="bg-black text-white px-4 py-2 rounded">Add Category</a>
+    </div>
+    <div class="bg-white rounded shadow overflow-hidden">
+      <table class="w-full text-sm">
+        <thead class="bg-gray-100 text-left">
+          <tr>
+            <th class="py-2 px-3">ID</th>
+            <th class="py-2 px-3">Name</th>
+            <th class="py-2 px-3">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for c in categories %}
+          <tr class="border-b last:border-0">
+            <td class="py-2 px-3">{{ c.id }}</td>
+            <td class="py-2 px-3">{{ c.name }}</td>
+            <td class="py-2 px-3 text-xs space-x-2">
+              <a href="{% url 'store:admin_edit_category' c.id %}" class="text-blue-600 hover:underline">Edit</a>
+              <a href="{% url 'store:admin_delete_category' c.id %}" onclick="return confirm('Delete this category?')" class="text-red-600 hover:underline">Delete</a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="2" class="py-6 text-center text-gray-500">No categories found.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+{% endblock %}

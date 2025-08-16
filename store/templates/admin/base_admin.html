@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin | OC Store</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex">
+  <!-- Sidebar -->
+  <aside class="w-60 bg-gray-900 text-gray-100 flex flex-col">
+    <div class="px-4 py-4 text-lg font-bold tracking-wide border-b border-gray-800">OC Admin</div>
+    <nav class="flex-1 px-2 py-4 space-y-1 text-sm">
+  <a href="{% url 'store:admin_dashboard' %}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-800 {% if request.path == '/panel/dashboard/' %}bg-gray-800{% endif %}"><i class="fa fa-chart-line"></i> Dashboard</a>
+  <a href="{% url 'store:admin_products' %}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-800 {% if '/panel/products' in request.path %}bg-gray-800{% endif %}"><i class="fa fa-box"></i> Products</a>
+      <a href="{% url 'store:admin_add_product' %}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-800"><i class="fa fa-plus"></i> Add Product</a>
+  <a href="{% url 'store:admin_categories' %}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-800 {% if '/panel/categories' in request.path %}bg-gray-800{% endif %}"><i class="fa fa-tags"></i> Categories</a>
+      <a href="{% url 'store:admin_add_category' %}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-800"><i class="fa fa-tag"></i> Add Category</a>
+  <a href="{% url 'store:admin_orders' %}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-800 {% if '/panel/orders' in request.path %}bg-gray-800{% endif %}"><i class="fa fa-receipt"></i> Orders</a>
+    </nav>
+    <div class="p-3 border-t border-gray-800 text-xs flex items-center justify-between">
+      <span class="truncate max-w-[110px]" title="{{ request.user.get_full_name|default:request.user.username }}">{{ request.user.username }}</span>
+      <form method="post" action="{% url 'store:logout' %}">{% csrf_token %}<button class="flex items-center gap-1 text-red-400 hover:text-red-300" title="Logout"><i class="fa fa-sign-out-alt"></i><span class="hidden md:inline">Logout</span></button></form>
+    </div>
+  </aside>
+  <!-- Main Content -->
+  <main class="flex-1 p-6 overflow-y-auto">
+    {% if messages %}
+    <div class="space-y-2 mb-4">
+      {% for message in messages %}
+      <div class="px-4 py-2 rounded text-sm {{ message.tags|default:'info' }} bg-white shadow border-l-4 {% if 'success' in message.tags %}border-green-500{% elif 'error' in message.tags %}border-red-500{% else %}border-blue-500{% endif %}">
+        {{ message }}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

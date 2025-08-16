@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<section class="py-10 bg-gray-50 min-h-screen">
+  <div class="max-w-3xl mx-auto px-4">
+    <h1 class="text-2xl font-bold text-gray-800 mb-6">Your Cart</h1>
+    {% if items %}
+    <div class="bg-white rounded-lg p-4 mb-6">
+  <table class="w-full text-left text-sm md:text-base">
+        <thead>
+          <tr class="border-b">
+            <th class="py-2">Product</th>
+            <th class="py-2">Brand</th>
+            <th class="py-2">Price</th>
+            <th class="py-2">Qty</th>
+            <th class="py-2">Total</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+    {% for item in items %}
+          <tr class="border-b">
+            <td class="py-2 flex items-center gap-2">
+              <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="w-12 h-12 object-contain rounded">
+              <span>{{ item.product.name }}</span>
+            </td>
+            <td class="py-2">{{ item.product.brand }}</td>
+            <td class="py-2">Rs {{ item.product.price }}</td>
+            <td class="py-2">{{ item.quantity }}</td>
+      <td class="py-2 font-medium">Rs {{ item.line_total }}</td>
+            <td class="py-2">
+              <form method="post" action="{% url 'store:remove_from_cart' item.id %}">
+                {% csrf_token %}
+                <button type="submit" class="text-red-500 hover:underline text-xs">Remove</button>
+              </form>
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="flex flex-col gap-2 mb-6">
+      <div class="flex justify-between items-center">
+        <span class="text-base">Delivery Charge:</span>
+        <span class="text-base">Rs 0</span>
+      </div>
+      <div class="flex justify-between items-center">
+        <span class="text-lg font-semibold">Grand Total:</span>
+        <span class="text-lg font-semibold">Rs {{ total }}</span>
+      </div>
+      <a href="{% url 'store:checkout' %}" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition mt-2">Proceed to Checkout</a>
+    </div>
+    {% else %}
+      <p class="text-gray-600">Your cart is empty.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

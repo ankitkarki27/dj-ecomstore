@@ -1,0 +1,38 @@
+{% extends 'admin/base_admin.html' %}
+{% load form_extras %}
+{% block content %}
+<section class="py-10 bg-gray-50 min-h-screen">
+  <div class="max-w-3xl mx-auto px-4">
+    <h1 class="text-2xl font-bold mb-6">Add Product</h1>
+    <form method="post" enctype="multipart/form-data" class="bg-white p-6 rounded shadow space-y-6">
+      {% csrf_token %}
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {% for field in form %}
+        <div>
+          <label class="block text-xs font-semibold tracking-wide mb-1 uppercase text-gray-600">{{ field.label }}{% if field.field.required %} *{% endif %}</label>
+          <div class="relative">
+                    {% if field.name == 'price' %}
+                      {{ field|add_class:'w-full border rounded px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm'|attr:'min:0,step:0.01' }}
+                    {% elif field.name == 'stock' %}
+                      {{ field|add_class:'w-full border rounded px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm'|attr:'min:0,step:1' }}
+                    {% else %}
+                      {{ field|add_class:'w-full border rounded px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm' }}
+                    {% endif %}
+          </div>
+          {% if field.help_text %}<p class="mt-1 text-[10px] text-gray-400">{{ field.help_text }}</p>{% endif %}
+          {% if field.errors %}
+          <p class="text-[11px] text-red-600 mt-1">{{ field.errors|join:', ' }}</p>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+      <div class="pt-2 flex items-center gap-3">
+          <button type="submit" class="bg-black hover:bg-gray-800 text-white px-6 py-2 rounded font-medium">{% if editing %}Update{% else %}Save Product{% endif %}</button>
+          <a href="{% url 'store:admin_products' %}" class="text-sm text-gray-600 hover:text-gray-800">Cancel</a>
+        </div>
+        <!-- <a href="{% url 'store:admin_products' %}" class="text-sm text-gray-600 hover:text-gray-800">Cancel</a> -->
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}Order #{{ order.id }}{% endblock %}
+{% block content %}
+<div class="max-w-3xl mx-auto px-4 py-10">
+  <a href="{% url 'store:order_history' %}" class="text-sm text-blue-600 hover:underline">← Back to orders</a>
+  <h1 class="text-2xl font-bold mt-2 mb-6 text-gray-800">Order #{{ order.id }}</h1>
+
+  <div class="bg-white rounded-lg shadow p-6 space-y-4">
+    <div class="grid md:grid-cols-2 gap-6">
+      <div>
+        <h2 class="text-lg font-semibold mb-2">Order Items</h2>
+        <ul class="space-y-2 text-sm text-gray-700">
+          {% for item in order.items.all %}
+            <li class="flex justify-between">
+              <span>{{ item.product.name }} × {{ item.quantity }}</span>
+              <span>Rs {{ item.price|floatformat:2 }}</span>
+            </li>
+          {% empty %}
+            <li>No items.</li>
+          {% endfor %}
+        </ul>
+        <div class="border-t mt-3 pt-3 text-sm flex justify-between font-semibold">
+          <span>Total</span>
+          <span>Rs {{ order.total_amount|floatformat:2 }}</span>
+        </div>
+      </div>
+      <div>
+        <h2 class="text-lg font-semibold mb-2">Order Info</h2>
+        <p class="text-sm text-gray-700">Date: {{ order.date }}</p>
+        <p class="text-sm text-gray-700">Status: {% if order.status %}<span class="text-green-600">Completed</span>{% else %}<span class="text-yellow-600">Pending</span>{% endif %}</p>
+      </div>
+    </div>
+    <div>
+      <h2 class="text-lg font-semibold mb-2">Shipping</h2>
+      <p class="text-sm text-gray-700">Address: {{ order.address|default:'-' }}</p>
+      <p class="text-sm text-gray-700">Phone: {{ order.phone|default:'-' }}</p>
+    </div>
+    {% if order.payment %}
+    <div>
+      <h2 class="text-lg font-semibold mb-2">Payment</h2>
+      <p class="text-sm text-gray-700">Method: {{ order.payment.get_method_display }}</p>
+      <p class="text-sm text-gray-700">Amount: Rs {{ order.payment.amount }}</p>
+      <p class="text-sm text-gray-700">Status: {{ order.payment.get_status_display }}</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

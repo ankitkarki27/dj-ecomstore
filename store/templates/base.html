@@ -1,13 +1,14 @@
 {% load static %}
+{% load cart_tags %}
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <!-- Meta Information -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Trendy{% endblock %}</title>
-    <meta name="csrf-token" content="{{ csrf_token }}"> <!-- Add CSRF meta tag -->
+    <title>{% block title %}OC Store{% endblock %}</title>
+    <meta name="csrf-token" content="{{ csrf_token }}">
 
     <!-- FontAwesome and Tailwind CSS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
@@ -15,119 +16,220 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
+
 <body class="bg-gray-50">
 
-    <!-- Header Section -->
-    <header class="bg-white fixed w-full top-0 left-0 z-50">
-        <nav class="container mx-auto px-4 py-3">
-            <div class="flex items-center justify-between">
+    <!-- Header -->
+    <header class="bg-white fixed w-full top-0 left-0 z-50 shadow-sm">
+        <nav class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+            <!-- Logo -->
+            <a href="{% url 'store:home' %}" class="text-gray-800 text-xl font-bold">OC Store</a>
 
-                <!-- Logo Section -->
-                <div class="flex items-center">
-                    <a href="/#home" class="flex items-center">
-                        <span class="ml-2 text-gray-800 text-xl font-bold">LaptopStore</span>
-                    </a>
-                </div>
+            <!-- Navigation -->
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="{% url 'store:home' %}" class="text-gray-800 hover:text-blue-500">Home</a>
+                <a href="#products" class="text-gray-800 hover:text-blue-500">Products</a>
+                <a href="#categories" class="text-gray-800 hover:text-blue-500">Categories</a>
+                <form action="{% url 'store:search' %}" method="get" class="relative">
+                    <input type="text" name="q" value="{{ request.GET.q|default:'' }}" placeholder="Search products..." class="pl-3 pr-8 py-1.5 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm w-56" />
+                    <button type="submit" class="absolute right-2 top-1.5 text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-search text-sm"></i>
+                    </button>
+                </form>
+            </div>
+            <button id="mobileMenuBtn" class="md:hidden text-gray-700 focus:outline-none">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
 
-                <!-- Navigation Links -->
-                <div class="flex items-center space-x-6">
-                    <a href="/#home" class="text-gray-800 hover:text-blue-500">Home</a>
-                    <!-- <a href="/#about" class="text-gray-800 hover:text-blue-500">About</a> -->
-                    <a href="/#categories" class="text-gray-800 hover:text-blue-500">Category</a>
-                </div>
+            <!-- User & Cart -->
+            <div class="flex items-center space-x-4">
+                <a href="{% url 'store:cart' %}" class="relative text-gray-800 hover:text-blue-500 flex items-center">
+                    <i class="fas fa-shopping-cart text-xl"></i>
+                    <span id="cart-count"
+                        class="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full px-2 py-1">
+                        {% cart_item_count %}
+                    </span>
+                </a>
 
-                <!-- Search Bar, Cart, and User Section -->
-                <div class="flex items-center space-x-4">
-                    <!-- Search Bar -->
-                    <div class="relative">
-                        <input type="text" placeholder="Search products..." class="w-64 px-4 py-2 rounded-lg border focus:outline-none focus:border-blue-500">
-                    </div>
-
-                    <!-- Cart Icon -->
-                    <a href="{% url 'cart:cart_summary' %}" class="relative text-gray-800 hover:text-blue-500 flex items-center">
-                        <i class="fas fa-shopping-cart text-xl"></i>
-                        <span id="cart-count" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full px-2 py-1">
-                            {% if request.user.is_authenticated %}
-                                {{ request.user.cart.items.count|default:0 }}
-                            {% else %}
-                                {{ request.session.cart.items|length|default:0 }}
-                            {% endif %}
-                        </span>
-                    </a>
-                    
-                    <!-- User Authentication Links -->
-                    {% if user.is_authenticated %}
-                    <a href="/logout/" class="bg-indigo-600 text-white px-4 py-1 rounded-lg hover:bg-indigo-700">{{ user.username }}</a>
-                    {% else %}
-                    <a href="/login/" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">Login</a>
-                    {% endif %}
-                </div>
+                                {% if user.is_authenticated %}
+                                <div class="relative inline-block text-left group">
+                                    <button id="userDropdownBtn" class="bg-gray-900 text-white px-4 py-1 rounded-lg hover:bg-gray-950 flex items-center focus:outline-none">
+                                        {{ user.first_name|default:user.username }}
+                                        <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                                    </button>
+                                    <div id="userDropdown" class="hidden absolute right-0 mt-2 w-44 bg-white border rounded shadow-lg z-50 group-hover:block">
+                                        <a href="{% url 'store:profile' %}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Profile</a>
+                                        <a href="{% url 'store:order_history' %}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Orders</a>
+                                        <a href="{% url 'store:home' %}#products" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Products</a>
+                                        <button onclick="confirmLogout()" class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">Logout</button>
+                                    </div>
+                                </div>
+                                <script>
+                                    // Show/hide dropdown on click
+                                    document.addEventListener('DOMContentLoaded', function() {
+                                        const btn = document.getElementById('userDropdownBtn');
+                                        const menu = document.getElementById('userDropdown');
+                                        if(btn && menu) {
+                                            btn.addEventListener('click', function(e) {
+                                                e.stopPropagation();
+                                                menu.classList.toggle('hidden');
+                                            });
+                                            document.addEventListener('click', function() {
+                                                menu.classList.add('hidden');
+                                            });
+                                        }
+                                    });
+                                    function confirmLogout() {
+                                        if(confirm('Do you want to logout?')) {
+                                            window.location.href = "{% url 'store:logout' %}";
+                                        }
+                                    }
+                                </script>
+                                {% else %}
+                                <a href="{% url 'store:login' %}" class="bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-950">
+                                        Login
+                                </a>
+                                {% endif %}
             </div>
         </nav>
+        <!-- Mobile dropdown menu -->
+        <div id="mobileMenu" class="md:hidden hidden bg-white border-t shadow-sm">
+            <div class="px-4 py-3 space-y-2">
+                <a href="{% url 'store:home' %}" class="block text-gray-800 hover:text-blue-500">Home</a>
+                <a href="{% url 'store:home' %}#products" class="block text-gray-800 hover:text-blue-500">Products</a>
+                <a href="#categories" class="block text-gray-800 hover:text-blue-500">Categories</a>
+                <form action="{% url 'store:search' %}" method="get" class="pt-2">
+                    <div class="flex items-center gap-2">
+                        <input type="text" name="q" value="{{ request.GET.q|default:'' }}" placeholder="Search..." class="flex-1 border border-gray-300 rounded px-2 py-1 text-sm" />
+                        <button class="bg-black text-white px-3 py-1 rounded text-sm">Go</button>
+                    </div>
+                </form>
+                {% if user.is_authenticated %}
+                <a href="{% url 'store:profile' %}" class="block text-gray-800 hover:text-blue-500">Profile</a>
+                <a href="{% url 'store:order_history' %}" class="block text-gray-800 hover:text-blue-500">Orders</a>
+                <button onclick="confirmLogout()" class="w-full text-left text-gray-800 hover:text-blue-500">Logout</button>
+                {% else %}
+                <a href="{% url 'store:login' %}" class="block text-gray-800 hover:text-blue-500">Login</a>
+                {% endif %}
+            </div>
+        </div>
     </header>
 
-    <!-- Main Content Wrapper -->
-    <main class="pt-16"> <!-- Added padding to account for fixed header -->
+    <!-- Main -->
+    <main class="pt-16">
+        {% if messages %}
+        <div id="django-messages" class="hidden">
+            {% for message in messages %}
+                <div data-msg="{{ message|escapejs }}" data-tags="{{ message.tags }}"></div>
+            {% endfor %}
+        </div>
+        <script>
+        document.addEventListener('DOMContentLoaded', function(){
+            const container = document.getElementById('django-messages');
+            if(!container) return;
+            const nodes = container.querySelectorAll('div[data-msg]');
+            const successEl = document.getElementById('cart-notification');
+            const errorEl = document.getElementById('cart-error');
+            const show = (el, text) => { if(!el) return; el.textContent = text; el.classList.remove('hidden'); setTimeout(()=> el.classList.add('hidden'), 2500); };
+            nodes.forEach((node,i)=>{
+                const text = node.getAttribute('data-msg');
+                const tags = node.getAttribute('data-tags') || '';
+                setTimeout(()=>{
+                    if(tags.indexOf('error') !== -1) show(errorEl, text);
+                    else if(tags.indexOf('success') !== -1) show(successEl, text);
+                    else show(successEl, text);
+                }, i*350);
+            });
+        });
+        </script>
+        {% endif %}
         {% block content %}
-        <!-- Content from child templates will be inserted here -->
         {% endblock %}
     </main>
 
-    <!-- Footer Section -->
-    <footer class="bg-gray-800 text-white">
-        <!-- Your existing footer content -->
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-6 mt-12">
+        <div class="container mx-auto text-center">
+            &copy; {{ now.year }} OC Store. All rights reserved.
+        </div>
     </footer>
 
-    <!-- Cart Notification -->
-    <div id="cart-notification" class="fixed bottom-4 right-4 hidden bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg">
-        Item added to cart!
-    </div>
+    <!-- Cart Notifications (single instances) -->
+    <div id="cart-notification" class="fixed bottom-4 right-4 hidden bg-green-600 text-white px-4 py-2 rounded shadow-lg z-50 text-sm"></div>
+    <div id="cart-error" class="fixed bottom-4 right-4 hidden bg-red-600 text-white px-4 py-2 rounded shadow-lg z-50 text-sm"></div>
 
-    <!-- JavaScript for Cart Functionality -->
+    <!-- Add to Cart Script -->
     <script>
-    function addToCart(productId) {
-        const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
-        
-        fetch('{% url "cart:cart_add" %}', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'X-CSRFToken': csrfToken
-            },
-            body: new URLSearchParams({
-                'product.id': productId
-            })
-        })
-        .then(response => {
-            if (!response.ok) throw new Error('Network error');
-            return response.json();
-        })
-        .then(data => {
-            if (data.error) {
-                console.error(data.error);
-                return;
+        // Mobile menu toggle
+        (function(){
+            const btn = document.getElementById('mobileMenuBtn');
+            const menu = document.getElementById('mobileMenu');
+            if(btn && menu){
+                btn.addEventListener('click', () => menu.classList.toggle('hidden'));
             }
-            
-            // Update notification
-            const notification = document.getElementById('cart-notification');
-            notification.textContent = `${data.product_name || 'Item'} added to cart`;
-            notification.classList.remove('hidden');
-            
-            // Update cart count everywhere
-            document.querySelectorAll('.cart-count').forEach(el => {
-                el.textContent = data.cart_count || 0;
+        })();
+        function addToCart(productId, opts={}) {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+            // Try find quantity input near button if not provided
+            let quantity = 1;
+            if(opts.quantity){
+                quantity = opts.quantity;
+            } else {
+                const qtyEl = document.getElementById('quantity');
+                if(qtyEl && qtyEl.value) quantity = parseInt(qtyEl.value) || 1;
+            }
+            const successEl = document.getElementById('cart-notification');
+            const errorEl = document.getElementById('cart-error');
+            const hideLater = el => setTimeout(()=> el.classList.add('hidden'), 2500);
+
+            fetch(`/cart/add/${productId}/`, {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken,
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: JSON.stringify({ quantity })
+            })
+            .then(async resp => {
+                let data = {};
+                try { data = await resp.json(); } catch(e){ /* HTML fallback (shouldn't happen) */ }
+                return { resp, data };
+            })
+            .then(({resp, data}) => {
+                if(data.success){
+                    if(successEl){
+                        successEl.textContent = `${data.product_name || 'Item'} added to cart`;
+                        successEl.classList.remove('hidden');
+                        hideLater(successEl);
+                    }
+                    const cartCount = document.getElementById('cart-count');
+                    if(cartCount) cartCount.textContent = data.cart_count || 0;
+                } else if(resp.status === 403){
+                    if(errorEl){
+                        errorEl.textContent = data.error || 'Please login to add items to cart';
+                        errorEl.classList.remove('hidden');
+                        hideLater(errorEl);
+                    }
+                } else {
+                    if(errorEl){
+                        errorEl.textContent = data.error || 'Could not add to cart';
+                        errorEl.classList.remove('hidden');
+                        hideLater(errorEl);
+                    }
+                }
+            })
+            .catch(err => {
+                console.error('Add to cart error', err);
+                if(errorEl){
+                    errorEl.textContent = 'Network error';
+                    errorEl.classList.remove('hidden');
+                    hideLater(errorEl);
+                }
             });
-            
-            // Hide notification after 3 seconds
-            setTimeout(() => {
-                notification.classList.add('hidden');
-            }, 3000);
-        })
-        .catch(error => {
-            console.error('Cart error:', error);
-            alert('Please login to add items to cart');
-        });
-    }
+        }
     </script>
+
 </body>
 </html>

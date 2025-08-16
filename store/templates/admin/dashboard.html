@@ -1,0 +1,71 @@
+{% extends 'admin/base_admin.html' %}
+{% block content %}
+<section class="py-10 bg-gray-50 min-h-screen">
+  <div class="max-w-7xl mx-auto px-4">
+    <h1 class="text-2xl font-bold mb-6">Admin Dashboard</h1>
+  <div class="grid grid-cols-2 md:grid-cols-5 gap-6 mb-10">
+      <div class="bg-white p-4 rounded shadow">
+        <p class="text-xs text-gray-500">Products</p>
+        <p class="text-xl font-bold">{{ stats.product_count }}</p>
+      </div>
+      <div class="bg-white p-4 rounded shadow">
+        <p class="text-xs text-gray-500">Orders(completed)</p>
+        <p class="text-xl font-bold">{{ stats.order_count }}</p>
+      </div>
+      <div class="bg-white p-4 rounded shadow">
+        <p class="text-xs text-gray-500">Pending Orders</p>
+        <p class="text-xl font-bold">{{ stats.pending_orders }}</p>
+      </div>
+      <div class="bg-white p-4 rounded shadow">
+        <p class="text-xs text-gray-500">Customers</p>
+        <p class="text-xl font-bold">{{ stats.customer_count }}</p>
+      </div>
+      <div class="bg-white p-4 rounded shadow">
+        <p class="text-xs text-gray-500">Income(Rs)</p>
+        <p class="text-xl font-bold">{{ stats.income }}</p>
+      </div>
+    </div>
+
+    <div class="bg-white p-6 rounded shadow mb-10">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="font-semibold">Recent Orders</h2>
+        <a href="{% url 'store:admin_orders' %}" class="text-sm text-blue-600">View All</a>
+      </div>
+      <table class="w-full text-sm">
+        <thead class="border-b">
+          <tr>
+            <th class="text-left py-2">ID</th>
+            <th class="text-left py-2">Customer</th>
+            <th class="text-left py-2">Date</th>
+            <th class="text-left py-2">Status</th>
+            <th class="text-left py-2">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for o in latest_orders %}
+          <tr class="border-b last:border-0">
+            <td class="py-2">#{{ o.id }}</td>
+            <td class="py-2">{{ o.customer }}</td>
+            <td class="py-2 text-xs">{{ o.date }}</td>
+            <td class="py-2">
+              {% if o.status %}<span class="px-2 py-1 text-xs rounded bg-green-100 text-green-700">Completed</span>{% else %}<span class="px-2 py-1 text-xs rounded bg-yellow-100 text-yellow-700">Pending</span>{% endif %}
+            </td>
+            <td class="py-2">Rs {{ o.total_amount }}</td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="5" class="py-4 text-center text-gray-500">No orders yet.</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="flex gap-4 text-sm">
+      <a href="{% url 'store:admin_add_product' %}" class="bg-blue-600 text-white px-4 py-2 rounded">Add Product</a>
+      <a href="{% url 'store:admin_products' %}" class="bg-gray-700 text-white px-4 py-2 rounded">View Products</a>
+      <a href="{% url 'store:admin_add_category' %}" class="bg-green-600 text-white px-4 py-2 rounded">Add Category</a>
+      <a href="{% url 'store:admin_categories' %}" class="bg-gray-800 text-white px-4 py-2 rounded">View Categories</a>
+      <a href="{% url 'store:admin_orders' %}" class="bg-indigo-600 text-white px-4 py-2 rounded">Manage Orders</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

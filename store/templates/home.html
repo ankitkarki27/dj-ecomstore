@@ -3,25 +3,16 @@
 
 {% block content %}
 
-<!-- Hero Section -->
-<section class="bg-white py-12">
-  <div class="container mx-auto px-6 flex flex-col md:flex-row items-center">
-    <div class="md:w-1/2 mb-8 md:mb-0">
-      <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
-        Power Your <span class="text-blue-600">Work & Play</span>
-      </h1>
-      <p class="text-gray-600 mb-6 text-base">
-        Discover high-performance laptops for work, school, and gaming at prices you'll love.
-      </p>
-      <a href="#products" class="inline-block bg-blue-600 text-white font-medium px-6 py-3 rounded-lg mr-4 hover:bg-blue-700 transition">
-        Shop Now
-      </a>
-      <a href="#categories" class="inline-block border border-gray-300 text-gray-700 font-medium px-6 py-3 rounded-lg hover:bg-gray-100 transition">
-        Browse Categories
-      </a>
-    </div>
-    <div class="md:w-1/2 flex justify-center">
-      <img src="{% static 'assests/hero2.png' %}" alt="Laptop" class="w-full max-w-md rounded-lg ">
+
+
+<!-- Full-Page Minimal Hero Section -->
+<section class="min-h-screen flex items-center justify-center bg-gradient-to-br from-white to-blue-50">
+  <div class="w-full max-w-2xl px-4 flex flex-col items-center text-center">
+    <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4 leading-tight">Effortless Style, Everyday</h1>
+    <p class="text-gray-500 mb-8 text-lg max-w-xl">Discover minimal, modern fashion for every mood and moment. Shop the latest arrivals and timeless essentials for your wardrobe.</p>
+    <div class="flex gap-4 flex-wrap justify-center">
+      <a href="#products" class="bg-blue-600 text-white font-medium px-6 py-3 rounded hover:bg-blue-700 transition">Shop Now</a>
+      <a href="#categories" class="border border-gray-300 text-gray-700 font-medium px-6 py-3 rounded hover:bg-gray-100 transition">Browse Categories</a>
     </div>
   </div>
 </section>
@@ -31,51 +22,67 @@
   <div class="container mx-auto px-4">
     <h2 class="text-2xl font-bold text-center mb-8">Shop by Category</h2>
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-      <a href="{% url 'store:category' 'budget-laptops' %}" class="p-6 text-center border rounded-lg hover:border-blue-400">
-        <i class="fas fa-wallet text-3xl text-blue-500 mb-3"></i>
-        <h3 class="font-medium">Budget</h3>
+      <a href="{% url 'store:category' 'jackets' %}" class="p-6 text-center border rounded-lg hover:border-blue-400">
+        <i class="fas fa-male text-3xl text-blue-500 mb-3"></i>
+        <h3 class="font-medium">Jackets</h3>
       </a>
-      <a href="{% url 'store:category' 'gaming-laptops' %}" class="p-6 text-center border rounded-lg hover:border-blue-400">
-        <i class="fas fa-gamepad text-3xl text-blue-500 mb-3"></i>
-        <h3 class="font-medium">Gaming</h3>
+      <a href="{% url 'store:category' 'shirts' %}" class="p-6 text-center border rounded-lg hover:border-blue-400">
+        <i class="fas fa-female text-3xl text-pink-500 mb-3"></i>
+        <h3 class="font-medium">Shirts</h3>
       </a>
-      <a href="{% url 'store:category' 'ultrabooks' %}" class="p-6 text-center border rounded-lg hover:border-blue-400">
-        <i class="fas fa-laptop text-3xl text-blue-500 mb-3"></i>
-        <h3 class="font-medium">Ultrabooks</h3>
+      <a href="{% url 'store:category' 'pants' %}" class="p-6 text-center border rounded-lg hover:border-blue-400">
+        <i class="fas fa-child text-3xl text-green-500 mb-3"></i>
+        <h3 class="font-medium">Pants</h3>
       </a>
-      <a href="{% url 'store:category' 'business-laptops' %}" class="p-6 text-center border rounded-lg hover:border-blue-400">
-        <i class="fas fa-briefcase text-3xl text-blue-500 mb-3"></i>
-        <h3 class="font-medium">Business</h3>
+      <a href="{% url 'store:category' 'kids' %}" class="p-6 text-center border rounded-lg hover:border-blue-400">
+        <i class="fas fa-hat-cowboy text-3xl text-yellow-500 mb-3"></i>
+        <h3 class="font-medium">Kids</h3>
+      </a>
+       <a href="{% url 'store:category' 'accessories' %}" class="p-6 text-center border rounded-lg hover:border-blue-400">
+        <i class="fas fa-hat-cowboy text-3xl text-yellow-500 mb-3"></i>
+        <h3 class="font-medium">Accessories</h3>
       </a>
     </div>
   </div>
 </section>
 
+
 <!-- Products Section -->
 <section id="products" class="py-12 bg-white">
   <div class="container mx-auto px-4">
     <h2 class="text-2xl font-bold text-center mb-8">Featured Products</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
       {% for product in products %}
-      <div class="border rounded-lg overflow-hidden hover:shadow-md">
-        <div class="relative">
-          <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-full object-contain p-4">
+      <div class="bg-white border border-gray-100 rounded-xl shadow-sm hover:shadow-lg transition flex flex-col">
+        <div class="relative group">
+          <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-56 object-cover rounded-t-xl group-hover:scale-105 transition-transform duration-300">
           {% if product.is_new %}
-          <span class="absolute top-2 left-2 bg-green-100 text-green-800 text-xs px-2 py-1 rounded">New</span>
+          <span class="absolute top-2 left-2 bg-green-500 text-white text-xs px-2 py-1 rounded shadow">New</span>
           {% endif %}
           {% if product.is_sale %}
-          <span class="absolute top-2 right-2 bg-red-100 text-red-800 text-xs px-2 py-1 rounded">Sale</span>
+          <span class="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded shadow">Sale</span>
           {% endif %}
         </div>
-        <div class="p-4">
-          <h3 class="font-medium">{{ product.name }}</h3>
-          <p class="text-gray-600 text-sm my-1">{{ product.category.name }}</p>
-          <p class="font-bold text-lg">Rs {{ product.price }}</p>
-          <div class="flex justify-between mt-4">
-            <button onclick="addToCart('{{ product.id }}')" class="text-gray-700 hover:text-blue-600">
+        <div class="flex-1 flex flex-col p-4">
+          <h3 class="font-semibold text-lg text-gray-800 mb-1 truncate">{{ product.name }}</h3>
+          <p class="text-gray-500 text-xs mb-2">{{ product.category.name }}</p>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-blue-600 font-bold text-lg">Rs {{ product.price }}</span>
+            {% if product.stock > 0 %}
+            <span class="text-xs px-2 py-1 rounded bg-gray-100 text-gray-700 border border-gray-200">Stock: <span class="font-semibold">{{ product.stock }}</span></span>
+            {% else %}
+            <span class="text-xs px-2 py-1 rounded bg-black text-white">Finished</span>
+            {% endif %}
+          </div>
+          <div class="flex justify-between items-center mt-auto pt-2">
+            {% if product.stock > 0 %}
+            <button onclick="addToCart('{{ product.id }}')" class="bg-black text-white px-3 py-1.5 rounded text-sm hover:bg-gray-800 flex items-center">
               <i class="fas fa-shopping-cart mr-1"></i> Add
             </button>
-            <a href="{% url 'store:product_page' product.id %}" class="text-blue-600 hover:text-blue-800">
+            {% else %}
+            <span class="text-xs text-red-500 font-medium">Out of Stock</span>
+            {% endif %}
+            <a href="{% url 'store:product_page' product.id %}" class="text-blue-600 hover:text-blue-800 text-xs font-medium">
               View Details
             </a>
           </div>
@@ -86,30 +93,6 @@
   </div>
 </section>
 
-<!-- Cart Notification -->
-<div id="cart-notification" class="fixed bottom-4 right-4 hidden bg-green-500 text-white px-4 py-2 rounded">
-  Item added to cart!
-</div>
-
-<script>
-function addToCart(productId) {
-    fetch("{% url 'store:add_to_cart' %}", {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': '{{ csrf_token }}'
-        },
-        body: JSON.stringify({ 'product_id': productId })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if(data.success){
-            const notif = document.getElementById('cart-notification');
-            notif.classList.remove('hidden');
-            setTimeout(()=> notif.classList.add('hidden'), 2000);
-        }
-    })
-}
-</script>
+<!-- Notifications removed here; using global in base.html -->
 
 {% endblock %}
